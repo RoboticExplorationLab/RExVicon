@@ -24,7 +24,7 @@ constexpr T GetUnitQuaternionScalar() {
 template <class T>
 struct Pose {
  public:
-  static_assert(std::is_signed<T>::value || std::is_floating_point<T>::value);
+  static_assert(std::is_signed<T>::value || std::is_floating_point<T>::value, "Invalid data type, must be a float or a signed integer");
 
   Pose() = default;
   Pose(int32_t scale_mm) : position_scale(scale_mm) {}
@@ -53,8 +53,8 @@ struct Pose {
 
 template <class Tfloat, class Tint>
 Pose<Tfloat> ConvertPoseIntToFloat(const Pose<Tint>& pint) {
-  static_assert(std::is_signed<Tint>::value);
-  static_assert(std::is_floating_point<Tfloat>::value);
+  static_assert(std::is_signed<Tint>::value, "Must provide a signed integer type");
+  static_assert(std::is_floating_point<Tfloat>::value, "Must provide a floating-base type");
 
   constexpr Tint Tmax = std::numeric_limits<Tint>::max();
   Pose<Tfloat> pfloat(
@@ -72,7 +72,7 @@ Pose<Tfloat> ConvertPoseIntToFloat(const Pose<Tint>& pint) {
 
 template <class Tint, class Tfloat>
 Tint ClampToInt(Tfloat f) {
-  static_assert(std::is_signed<Tint>::value);
+  static_assert(std::is_signed<Tint>::value, "Can only clamp to signed integers");
 
   constexpr Tint imin = std::numeric_limits<Tint>::min();
   constexpr Tint imax = std::numeric_limits<Tint>::max();
@@ -87,8 +87,8 @@ Tint ClampToInt(Tfloat f) {
 
 template <class Tint, class Tfloat>
 Pose<Tint> ConvertPoseFloatToInt(const Pose<Tfloat>& pfloat) {
-  static_assert(std::is_signed<Tint>::value);
-  static_assert(std::is_floating_point<Tfloat>::value);
+  static_assert(std::is_signed<Tint>::value, "Must provide a signed integer type");
+  static_assert(std::is_floating_point<Tfloat>::value, "Must provide a floating-base type");
 
   constexpr Tint Tmax = std::numeric_limits<Tint>::max();
   Pose<Tint> pint(

@@ -1,18 +1,32 @@
-add_library(vicon_driver
+# Include the src/ folder in all targets
+# Makes all includes releative to src/ folder
+include_directories(
+  "$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>"
+  "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>"
+)
+
+add_library(rexvicon_driver
   vicon_driver.hpp
   vicon_driver.cpp
 
   pose.hpp
   pose.cpp
 )
-target_link_libraries(vicon_driver
+target_link_libraries(rexvicon_driver
   PRIVATE
   ViconSDK::ViconSDK
 )
-
-add_library(pose
-  pose.hpp
-  pose.cpp
+add_library(RExVicon::vicon_driver ALIAS rexvicon_driver)
+set_target_properties(rexvicon_driver PROPERTIES
+  OUTPUT_NAME vicon_driver # sets the name of the installed library
+  EXPORT_NAME vicon_driver # sets the name of the imported target
 )
 
+# Install the library
+install(TARGETS rexvicon_driver 
+  EXPORT RExVicon_export # add to the export set
+)
+
+
+# Add tests
 add_subdirectory(test)
