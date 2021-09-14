@@ -58,9 +58,9 @@ Pose<Tfloat> ConvertPoseIntToFloat(const Pose<Tint>& pint) {
 
   constexpr Tint Tmax = std::numeric_limits<Tint>::max();
   Pose<Tfloat> pfloat(
-    static_cast<Tfloat>(pint.position_x * pint.position_scale / static_cast<Tfloat>(Tmax)),
-    static_cast<Tfloat>(pint.position_y * pint.position_scale / static_cast<Tfloat>(Tmax)),
-    static_cast<Tfloat>(pint.position_z * pint.position_scale / static_cast<Tfloat>(Tmax)),
+    static_cast<Tfloat>((pint.position_x / static_cast<Tfloat>(Tmax)) * (pint.position_scale / 1000.0)),
+    static_cast<Tfloat>((pint.position_y / static_cast<Tfloat>(Tmax)) * (pint.position_scale / 1000.0)),
+    static_cast<Tfloat>((pint.position_z / static_cast<Tfloat>(Tmax)) * (pint.position_scale / 1000.0)),
     static_cast<Tfloat>(pint.quaternion_w / static_cast<Tfloat>(Tmax)),
     static_cast<Tfloat>(pint.quaternion_x / static_cast<Tfloat>(Tmax)),
     static_cast<Tfloat>(pint.quaternion_y / static_cast<Tfloat>(Tmax)),
@@ -92,14 +92,14 @@ Pose<Tint> ConvertPoseFloatToInt(const Pose<Tfloat>& pfloat) {
 
   constexpr Tint Tmax = std::numeric_limits<Tint>::max();
   Pose<Tint> pint(
-    ClampToInt<Tint>(pfloat.position_x / pfloat.position_scale * Tmax),
-    ClampToInt<Tint>(pfloat.position_y / pfloat.position_scale * Tmax),
-    ClampToInt<Tint>(pfloat.position_z / pfloat.position_scale * Tmax),
+    ClampToInt<Tint>(pfloat.position_x * (1000.0 / static_cast<Tfloat>(pfloat.position_scale))  * Tmax),
+    ClampToInt<Tint>(pfloat.position_y * (1000.0 / static_cast<Tfloat>(pfloat.position_scale))  * Tmax),
+    ClampToInt<Tint>(pfloat.position_z * (1000.0 / static_cast<Tfloat>(pfloat.position_scale))  * Tmax),
     ClampToInt<Tint>(pfloat.quaternion_w * Tmax), 
     ClampToInt<Tint>(pfloat.quaternion_x * Tmax), 
     ClampToInt<Tint>(pfloat.quaternion_y * Tmax), 
     ClampToInt<Tint>(pfloat.quaternion_z * Tmax), 
-    pint.position_scale
+    pfloat.position_scale
   );
   return pint;
 }

@@ -3,5 +3,8 @@ add_executable(pose_test
 )
 target_link_libraries(pose_test
   PRIVATE
+  gtest_main
+  fmt::fmt
   vicon_driver
 )
+gtest_discover_tests(pose_test)
