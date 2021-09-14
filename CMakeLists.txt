@@ -10,7 +10,9 @@ include(CMakePrintHelpers)
 LIST(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
 
 find_package(ViconSDK REQUIRED)
-cmake_print_variables(ViconSDK_FOUND)
+
+include_directories(${RExVicon_SOURCE_DIR})
+add_subdirectory(src)
 
 add_executable(main
     main.cpp

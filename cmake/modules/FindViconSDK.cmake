@@ -1,7 +1,6 @@
 set(projPrefix ViconSDK)
 
 list(APPEND CMAKE_MESSAGE_CONTEXT FindViconSDK)
-cmake_print_variables(ViconSDK_FIND_REQUIRED)
 
 # Get the system-specific sub-directory for the SDK
 set(SDK_SYSDIR)
