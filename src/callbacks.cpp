@@ -1,4 +1,5 @@
 #include "src/callbacks.hpp"
+#include <zmq.hpp>
 
 namespace rexlab {
 

@@ -1,9 +1,17 @@
+add_compile_options(-Wall -Wextra -pedantic -Werror)
+set(CMAKE_VERBOSE_MAKEFILE ON)
+
 # Include the src/ folder in all targets
 # Makes all includes releative to src/ folder
 include_directories(
   "$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>"
   "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>"
 )
+
+get_target_property(CPPZMQ_INCLUDE_DIR cppzmq INTERFACE_INCLUDE_DIRECTORIES)
+cmake_print_variables(CPPZMQ_INCLUDE_DIR)
+get_target_property(ZMQ_INCLUDE_DIR libzmq INTERFACE_INCLUDE_DIRECTORIES)
+cmake_print_variables(ZMQ_INCLUDE_DIR)
 
 add_library(rexvicon_driver
   vicon_driver.hpp
@@ -19,6 +27,7 @@ target_link_libraries(rexvicon_driver
   PRIVATE
   ViconSDK::ViconSDK
   fmt::fmt
+  cppzmq
 )
 add_library(RExVicon::vicon_driver ALIAS rexvicon_driver)
 set_target_properties(rexvicon_driver PROPERTIES
@@ -29,6 +38,7 @@ target_include_directories(rexvicon_driver
   PUBLIC
   ${Boost_INLCUDE_DIRS}
 )
+
 
 # Install the library
 install(TARGETS rexvicon_driver 

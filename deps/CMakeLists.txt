@@ -24,5 +24,6 @@ if (${${OPTION_PREFIX}_BUILD_TESTS})
 endif()
 
 
-find_package(Boost REQUIRED
-)
+find_package(Boost REQUIRED)
+
+include(BuildZMQ.cmake)

@@ -5,7 +5,6 @@ project(RExVicon VERSION 0.1 LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-add_compile_options(-Wall -Wextra -pedantic -Werror)
 
 list(APPEND CMAKE_MESSAGE_CONTEXT RExVicon)
 include(CMakePrintHelpers)

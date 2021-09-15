@@ -18,6 +18,13 @@ struct ViconDriverOptions {
   int32_t position_scale = 1000; // in mm
 };
 
+/**
+ * @brief A class that processes the Vicon data stream and calls user-defined functions
+ * on each object.
+ * 
+ * REFERENCE: This code is largely based off of the implementation here:
+ * https://github.com/alspitz/simple_vicon
+ */
 class ViconDriver {
   using CallbackFunction = std::function<void(const Pose<float>& pose)>;
 
