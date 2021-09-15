@@ -28,7 +28,7 @@ struct Pose {
 
   Pose() = default;
   Pose(int32_t scale_mm) : position_scale(scale_mm) {}
-  Pose(T px, T py, T pz, T qw, T qx, T qy, T qz, int32_t scale)
+  Pose(T px, T py, T pz, T qw, T qx, T qy, T qz, int32_t scale, bool occluded)
       : position_x(px),
         position_y(py),
         position_z(pz),
@@ -36,7 +36,11 @@ struct Pose {
         quaternion_x(qx),
         quaternion_y(qy),
         quaternion_z(qz),
-        position_scale(scale) {}
+        position_scale(scale),
+        is_occluded(occluded) {}
+  char* GetData() { return reinterpret_cast<char*>(this); }
+  const char* GetData() const { return reinterpret_cast<const char*>(this); }
+  static constexpr int NumBytes() { return 7 * sizeof(T) + 9; }
 
   T position_x = 0;
   T position_y = 0;
@@ -48,6 +52,7 @@ struct Pose {
 
   int32_t position_scale = 1000;  // in millimeters 
   int32_t time_us = 0.0;          // timestamp (microseconds)
+  bool is_occluded = false;
  private:
 };
 
@@ -65,7 +70,7 @@ Pose<Tfloat> ConvertPoseIntToFloat(const Pose<Tint>& pint) {
     static_cast<Tfloat>(pint.quaternion_x / static_cast<Tfloat>(Tmax)),
     static_cast<Tfloat>(pint.quaternion_y / static_cast<Tfloat>(Tmax)),
     static_cast<Tfloat>(pint.quaternion_z / static_cast<Tfloat>(Tmax)),
-    pint.position_scale
+    pint.position_scale, pint.is_occluded
   );
   return pfloat;
 }
@@ -99,7 +104,7 @@ Pose<Tint> ConvertPoseFloatToInt(const Pose<Tfloat>& pfloat) {
     ClampToInt<Tint>(pfloat.quaternion_x * Tmax), 
     ClampToInt<Tint>(pfloat.quaternion_y * Tmax), 
     ClampToInt<Tint>(pfloat.quaternion_z * Tmax), 
-    pfloat.position_scale
+    pfloat.position_scale, pfloat.is_occluded
   );
   return pint;
 }
@@ -107,9 +112,12 @@ Pose<Tint> ConvertPoseFloatToInt(const Pose<Tfloat>& pfloat) {
 
 template <class T>
 std::ostream& operator<<(std::ostream& io, const Pose<T>& pose) {
-  io << pose.position_x << " " << pose.position_y << " " << pose.position_z << " / "
+  io << "Position: " 
+     << pose.position_x << " " << pose.position_y << " " << pose.position_z 
+     << " Rotation: "
      << pose.quaternion_w << " " << pose.quaternion_x << " " << pose.quaternion_y << " " 
-     << pose.quaternion_z << " ";
+     << pose.quaternion_z << 
+     " Occluded? " << pose.is_occluded ;
   return io;
 }
 

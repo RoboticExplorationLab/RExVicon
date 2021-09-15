@@ -5,8 +5,9 @@
 
 namespace rexlab {
 
-bool ViconDriver::Initialize(const ViconDriverOptions& opts, CallbackFunction callback) {
-  callback_ = callback;
+bool ViconDriver::Initialize(const ViconDriverOptions& opts) {
+  opts_ = opts;
+
   client_.Connect(opts.server_id);
   if (!client_.IsConnected().Connected) {
     std::cerr << "Failed to connect to Vicon server at " << opts.server_id << std::endl;
@@ -19,12 +20,20 @@ bool ViconDriver::Initialize(const ViconDriverOptions& opts, CallbackFunction ca
   return true;
 }
 
+bool ViconDriver::AddCallback(const std::string& subject_name, const CallbackFunction& callback) {
+  auto pair = callbacks_.emplace(std::make_pair(subject_name, callback));
+  return pair.second;
+}
+
 void ViconDriver::RunLoop() {
   client_.EnableSegmentData();
   int wait_for_buffer_counter = 0;
   bool ready_for_init = false;
 
   Pose<float> pose;
+  pose.position_scale = opts_.position_scale;
+
+  std::map<std::string, CallbackFunction>::iterator callback_iterator;
 
   is_running_.store(true);
   while (is_running_.load()) {
@@ -73,40 +82,47 @@ void ViconDriver::RunLoop() {
       printf("Timecode offset :: %.8f Time:: %.8f Timecode %.8f lag :: %f\n", timecode_offset_, time_now, timecode_time, network_lag_estimate_);
     }
     // Move the timecode to the client (our) clock, and subtract the vicon system estimated latency from it.
-    pose.time_us = timecode_time + timecode_offset_ - client_.GetLatencyTotal().Total;
+    double time_s = timecode_time + timecode_offset_ - client_.GetLatencyTotal().Total;
+
+    // Loop over all of the subjects
     int n_subjects = client_.GetSubjectCount().SubjectCount;
     for (int i = 0; i < n_subjects; i++) {
       std::string subject_name = client_.GetSubjectName(i).SubjectName;
-      std::string segment_name = client_.GetSegmentName(subject_name, 0).SegmentName;
-      auto trans = client_.GetSegmentGlobalTranslation(subject_name, segment_name);
-      auto rot = client_.GetSegmentGlobalRotationQuaternion(subject_name, segment_name);
 
-      if (trans.Result != ViconSDK::Result::Success) {
-        std::cerr << "Translation get failed for " << subject_name << "::" << segment_name << std::endl;
+      // Check if the subject name matches one of the callbacks
+      callback_iterator = callbacks_.find(subject_name);
+      if (callback_iterator != callbacks_.end()) {
+        // Get the VICON translation and rotation data
+        std::string segment_name = client_.GetSegmentName(subject_name, 0).SegmentName;
+        auto trans = client_.GetSegmentGlobalTranslation(subject_name, segment_name);
+        auto rot = client_.GetSegmentGlobalRotationQuaternion(subject_name, segment_name);
+
+        if (trans.Result != ViconSDK::Result::Success) {
+          std::cerr << "Translation get failed for " << subject_name << "::" << segment_name << std::endl;
+        }
+        if (rot.Result != ViconSDK::Result::Success) {
+          std::cerr << "Rotation get failed for " << subject_name << "::" << segment_name << std::endl;
+        }
+
+        // Convert to Pose type
+
+        // Convert mm translation to meters
+        pose.position_x = trans.Translation[0] * 0.001; 
+        pose.position_y = trans.Translation[1] * 0.001; 
+        pose.position_z = trans.Translation[2] * 0.001; 
+
+        // Convert scalar last to scalar first
+        pose.quaternion_w = rot.Rotation[3];
+        pose.quaternion_x = rot.Rotation[0];
+        pose.quaternion_y = rot.Rotation[1];
+        pose.quaternion_z = rot.Rotation[2];
+        pose.is_occluded = trans.Occluded || rot.Occluded;
+        pose.time_us = static_cast<int32_t>(time_s * 1000000);
+
+        // Pass pose to callback
+        const CallbackFunction& callback = callback_iterator->second;
+        callback(pose);
       }
-      if (rot.Result != ViconSDK::Result::Success) {
-        std::cerr << "Rotation get failed for " << subject_name << "::" << segment_name << std::endl;
-      }
-
-    //   res.data.emplace_back(
-    //       subject_name,
-    //       trans.Occluded or rot.Occluded,
-    //       // Translations are in mm
-    //       std::array<double, 3>{
-    //           trans.Translation[0] * 0.001,
-    //           trans.Translation[1] * 0.001,
-    //           trans.Translation[2] * 0.001},
-    //       // Quaternion is returned in W last format; we store it W first.
-    //       std::array<double, 4>{
-    //           rot.Rotation[3],
-    //           rot.Rotation[0],
-    //           rot.Rotation[1],
-    //           rot.Rotation[2]});
-    // }
-
-    // if (res.data.size()) {
-    //   callback_(res);
-    // }
   }
 }
 

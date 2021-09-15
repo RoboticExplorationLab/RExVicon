@@ -31,4 +31,26 @@ TEST(PoseTest, Conversion) {
   EXPECT_DOUBLE_EQ(pfloat64.quaternion_x, 0.0);
 }
 
+TEST(PoseTest, Size) {
+  Pose<float> pfloat;
+  EXPECT_EQ(sizeof(pfloat), 40);
+  Pose<double> pdouble;
+  EXPECT_EQ(sizeof(pdouble), 72);
+}
+
+TEST(PoseTest, GetData) {
+  int numbytes = Pose<float>::NumBytes();
+  EXPECT_EQ(numbytes, 37);
+  EXPECT_EQ(Pose<double>::NumBytes(), 65);
+
+  Pose<float> pfloat;
+  EXPECT_EQ(numbytes, pfloat.NumBytes());
+  char* data = pfloat.GetData();
+  EXPECT_EQ(data[36], 0);
+  pfloat.is_occluded = true;
+  EXPECT_EQ(data[36], 1);
+  data[32] = 5;
+  EXPECT_EQ(pfloat.time_us, 5);
+}
+
 }  // namespace rexlab

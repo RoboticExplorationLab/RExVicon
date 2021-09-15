@@ -22,3 +22,7 @@ if (${${OPTION_PREFIX}_BUILD_TESTS})
 
   FetchContent_MakeAvailable(googletest)
 endif()
+
+
+find_package(Boost REQUIRED
+)
