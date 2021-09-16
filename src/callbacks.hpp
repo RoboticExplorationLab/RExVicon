@@ -1,13 +1,15 @@
 #pragma once
 
-#include <boost/asio.hpp>
-#include <iostream>
-#include <string>
-
 #include <fmt/core.h>
 #include <fmt/ostream.h>
 
+#include <boost/asio.hpp>
+#include <iostream>
+#include <string>
+#include <zmq.hpp>
+
 #include "src/pose.hpp"
+#include "src/utils.hpp"
 
 namespace rexlab {
 
@@ -45,7 +47,7 @@ class PrintCallback {
       fclose(io_);
     }
   }
-  
+
   template <class T>
   void operator()(const Pose<T>& pose) {
     fmt::print(io_, "{}\n", pose);
@@ -54,6 +56,35 @@ class PrintCallback {
  private:
   FILE* io_ = stdout;
   bool is_file_ = false;
+};
+
+class ZMQCallback {
+ public:
+
+  template <class... Args>
+  ZMQCallback(Args... args)
+      : addr_(args...), ctx_(), socket_(ctx_, zmq::socket_type::pub) {
+    try {
+      socket_.bind(addr_.ToString());
+      fmt::print("Publisher successfully bound to {}\n", addr_.ToString());
+    } catch(const zmq::error_t& e) {
+      fmt::print("Error binding publisher to port {}\n", port_name_);
+      throw(e);
+    }
+  }
+
+  void WriteBytes(const char* data, size_t size);
+
+  template <class T>
+  void operator()(const Pose<T>& pose) {
+    WriteBytes(pose.GetData(), pose.NumBytes());
+  }
+
+ private:
+  TcpAddress addr_;
+  std::string port_name_;
+  zmq::context_t ctx_;
+  zmq::socket_t socket_;
 };
 
 }  // namespace rexlab

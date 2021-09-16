@@ -24,7 +24,6 @@ include(CTest)
 # Dependencies 
 ####################
 add_subdirectory(deps)
-find_package(ViconSDK REQUIRED)
 
 ####################
 # Build

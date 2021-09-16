@@ -23,6 +23,7 @@ find_library(SDK_LIB ViconDataStreamSDK_CPP
     NO_DEFAULT_PATH
 )
 find_library(SDK_LIB ViconDataStreamSDK_CPP)
+cmake_print_variables(SDK_LIB)
 
 if ((${SDK_LIB} STREQUAL SDK_LIB-NOTFOUND} OR ${SDK_HEADER} STREQUAL SDK_HEADER-NOTFOUND))
     if (NOT ViconSDK_FIND_QUIETLY)
@@ -35,20 +36,12 @@ if ((${SDK_LIB} STREQUAL SDK_LIB-NOTFOUND} OR ${SDK_HEADER} STREQUAL SDK_HEADER-
     set(ViconSDK_FOUND FALSE)
 else()
     # Export the library w/ include path
-    add_library(${projPrefix}::ViconSDK SHARED IMPORTED)
-    set_target_properties(${projPrefix}::ViconSDK PROPERTIES
-        IMPORTED_LOCATION ${SDK_LIB} 
-    )
-
     get_filename_component(SDK_INCLUDE_DIR ${SDK_HEADER} DIRECTORY)
-    target_include_directories(${projPrefix}::ViconSDK
-        INTERFACE 
-        ${SDK_INCLUDE_DIR}
-    )
 
     set(ViconSDK_LIBRARIES ViconSDK::ViconSDK)
     set(ViconSDK_ROOT_DIR SDK_INCLUDE_DIR)
-    set(ViconSDK_INCLUDE_DIRS ${SDK_DIR})
+    set(ViconSDK_INCLUDE_DIRS ${SDK_INCLUDE_DIR})
+    set(ViconSDK_LIB ${SDK_LIB})
     set(ViconSDK_FOUND TRUE)
 endif()
 

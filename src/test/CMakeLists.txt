@@ -7,19 +7,12 @@ function(rexvicon_test test_name)
     gtest_main
     fmt::fmt
     RExVicon::vicon_driver
+    ViconSDK::ViconSDK
   )
   gtest_discover_tests(${test_name})
 endfunction()
 
 rexvicon_test(pose_test)
 rexvicon_test(callbacks_test)
-
-# add_executable(pose_test
-#   pose_test.cpp
-# )
-# target_link_libraries(pose_test
-#   PRIVATE
-#   gtest_main
-#   fmt::fmt
-#   RExVicon::vicon_driver
-# )
+rexvicon_test(vicon_connection_test)
+rexvicon_test(zmq_pub_test)

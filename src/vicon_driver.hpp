@@ -33,6 +33,7 @@ class ViconDriver {
   ~ViconDriver();
 
   bool Initialize(const ViconDriverOptions& opts);
+  bool IsConnected() { return client_.IsConnected().Connected; }
   bool AddCallback(const std::string& subject_name, const CallbackFunction& callback);
   void ClearCallbacks() { callbacks_.clear(); }
   void RunLoop();
@@ -42,7 +43,7 @@ class ViconDriver {
   ViconSDK::Client client_;
   std::atomic<bool> is_running_;
   double timecode_offset_ = 0.0;
-  double network_lag_estimate_;
+  double network_lag_estimate_ = 0.0;
   std::map<std::string, CallbackFunction> callbacks_;
   ViconDriverOptions opts_;
 };

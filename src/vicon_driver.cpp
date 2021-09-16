@@ -3,7 +3,17 @@
 #include <chrono>
 #include <iostream>
 
+#include <fmt/core.h>
+
 namespace rexlab {
+
+ViconDriver::ViconDriver() : client_(), is_running_(false), opts_() {}
+
+ViconDriver::~ViconDriver() {
+  if (client_.IsConnected().Connected) {
+    client_.Disconnect();
+  }
+}
 
 bool ViconDriver::Initialize(const ViconDriverOptions& opts) {
   opts_ = opts;
@@ -36,6 +46,7 @@ void ViconDriver::RunLoop() {
   std::map<std::string, CallbackFunction>::iterator callback_iterator;
 
   is_running_.store(true);
+  fmt::print("Starting ViconDriver Loop...\n");
   while (is_running_.load()) {
     auto result = client_.GetFrame().Result;
 

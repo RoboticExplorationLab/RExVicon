@@ -22,13 +22,21 @@ add_library(rexvicon_driver
 
   callbacks.hpp
   callbacks.cpp
+
+  utils.hpp
+  utils.cpp
 )
+
+
 target_link_libraries(rexvicon_driver
+  PUBLIC
+  cppzmq
+
   PRIVATE
   ViconSDK::ViconSDK
   fmt::fmt
-  cppzmq
 )
+
 add_library(RExVicon::vicon_driver ALIAS rexvicon_driver)
 set_target_properties(rexvicon_driver PROPERTIES
   OUTPUT_NAME vicon_driver # sets the name of the installed library
@@ -38,7 +46,6 @@ target_include_directories(rexvicon_driver
   PUBLIC
   ${Boost_INLCUDE_DIRS}
 )
-
 
 # Install the library
 install(TARGETS rexvicon_driver 

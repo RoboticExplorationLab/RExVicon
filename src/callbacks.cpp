@@ -28,4 +28,10 @@ bool SerialCallback::WriteBytes(const char* data, size_t size) {
   return false;
 }
 
+void ZMQCallback::WriteBytes(const char* data, size_t size) {
+  fmt::print("Sending ZMQ message...\n");
+  socket_.send(zmq::message_t(data, size), zmq::send_flags::none);
+}
+
+
 }  // namespace rexlab
