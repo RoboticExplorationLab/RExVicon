@@ -21,6 +21,7 @@ void SerialCallback::Close() {
 }
 
 bool SerialCallback::WriteBytes(const char* data, size_t size) {
+  fmt::print("Writing to serial...\n");
   if (IsOpen()) {
     serial_port_.write_some(boost::asio::buffer(data, size));
     return true;

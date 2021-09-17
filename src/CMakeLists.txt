@@ -8,6 +8,24 @@ include_directories(
   "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>"
 )
 
+find_package(PkgConfig)
+pkg_check_modules(LIBSP libserialport)
+cmake_print_variables(LIBSP_VERSION)
+cmake_print_variables(LIBSP_LIBRARIES)
+cmake_print_variables(LIBSP_LINK_LIBRARIES)
+cmake_print_variables(LIBSP_LIBRARY_DIRS)
+
+add_library(libserialport INTERFACE)
+target_link_libraries(libserialport
+  INTERFACE
+  ${LIBSP_LINK_LIBRARIES}
+)
+target_include_directories(libserialport
+  INTERFACE
+  ${LIBSP_INCLUDE_DIRS}
+)
+
+
 get_target_property(CPPZMQ_INCLUDE_DIR cppzmq INTERFACE_INCLUDE_DIRECTORIES)
 cmake_print_variables(CPPZMQ_INCLUDE_DIR)
 get_target_property(ZMQ_INCLUDE_DIR libzmq INTERFACE_INCLUDE_DIRECTORIES)
@@ -35,6 +53,7 @@ target_link_libraries(rexvicon_driver
   PRIVATE
   ViconSDK::ViconSDK
   fmt::fmt
+  libserialport
 )
 
 add_library(RExVicon::vicon_driver ALIAS rexvicon_driver)

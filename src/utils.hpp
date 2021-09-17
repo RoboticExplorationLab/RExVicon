@@ -1,6 +1,10 @@
 #pragma once
 
 #include <string>
+#include <stdexcept>
+#include <vector>
+
+#include <libserialport.h>
 
 namespace rexlab {
 
@@ -20,5 +24,13 @@ public:
   int port_ = kAnyPort;
 };
 
+std::vector<std::string> GetPortList();
+
+class LibSerialPortError : public std::runtime_error {
+ public:
+  LibSerialPortError(std::string arg) : std::runtime_error(std::move(arg)) {}
+};
+
+bool LibSerialCheck(enum sp_return result);
 
 } // namespace rexlab

@@ -87,4 +87,11 @@ class ZMQCallback {
   zmq::socket_t socket_;
 };
 
+class SerialZMQCallback {
+ public:
+ private:
+  ZMQCallback zmq_;
+  SerialCallback ser_;
+};
+
 }  // namespace rexlab
