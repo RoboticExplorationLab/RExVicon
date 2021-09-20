@@ -29,26 +29,28 @@ TEST(PoseTest, Conversion) {
   EXPECT_DOUBLE_EQ(pfloat64.position_y, 0.0);
   EXPECT_DOUBLE_EQ(pfloat64.quaternion_w, 1.0);
   EXPECT_DOUBLE_EQ(pfloat64.quaternion_x, 0.0);
+  fmt::print("Size of Pose: {}\n", sizeof(pint));
 }
 
 TEST(PoseTest, Size) {
   Pose<float> pfloat;
-  EXPECT_EQ(sizeof(pfloat), 40);
+  EXPECT_EQ(sizeof(pfloat), 36);
   Pose<double> pdouble;
   EXPECT_EQ(sizeof(pdouble), 72);
 }
 
 TEST(PoseTest, GetData) {
   int numbytes = Pose<float>::NumBytes();
-  EXPECT_EQ(numbytes, 37);
-  EXPECT_EQ(Pose<double>::NumBytes(), 65);
+  EXPECT_EQ(numbytes, 36);
+  EXPECT_EQ(Pose<double>::NumBytes(), 64);
 
   Pose<float> pfloat;
   EXPECT_EQ(numbytes, pfloat.NumBytes());
   char* data = pfloat.GetData();
-  EXPECT_EQ(data[36], 0);
+  EXPECT_EQ(data[1], 0);
   pfloat.is_occluded = true;
-  EXPECT_EQ(data[36], 1);
+  EXPECT_EQ(data[1], 1);
+  EXPECT_EQ(data[0], pfloat.msgid);
   data[32] = 5;
   EXPECT_EQ(pfloat.time_us, 5);
 }

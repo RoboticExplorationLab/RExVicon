@@ -24,24 +24,29 @@ constexpr T GetUnitQuaternionScalar() {
 template <class T>
 struct Pose {
  public:
+  static constexpr uint8_t kMsgID = 11;
+
   static_assert(std::is_signed<T>::value || std::is_floating_point<T>::value, "Invalid data type, must be a float or a signed integer");
 
   Pose() = default;
   Pose(int32_t scale_mm) : position_scale(scale_mm) {}
   Pose(T px, T py, T pz, T qw, T qx, T qy, T qz, int32_t scale, bool occluded)
-      : position_x(px),
+      : is_occluded(occluded),
+        position_scale(scale),
+        position_x(px),
         position_y(py),
         position_z(pz),
         quaternion_w(qw),
         quaternion_x(qx),
         quaternion_y(qy),
-        quaternion_z(qz),
-        position_scale(scale),
-        is_occluded(occluded) {}
+        quaternion_z(qz) {}
   char* GetData() { return reinterpret_cast<char*>(this); }
   const char* GetData() const { return reinterpret_cast<const char*>(this); }
-  static constexpr int NumBytes() { return 7 * sizeof(T) + 9; }
+  static constexpr int NumBytes() { return 7 * sizeof(T) + 4 + 4; }
 
+  const uint8_t msgid = kMsgID;
+  bool is_occluded = false;
+  uint16_t position_scale = 1000;  // in millimeters (max ~65m)
   T position_x = 0;
   T position_y = 0;
   T position_z = 0;
@@ -50,9 +55,7 @@ struct Pose {
   T quaternion_y = 0;
   T quaternion_z = 0;
 
-  int32_t position_scale = 1000;  // in millimeters 
-  int32_t time_us = 0.0;          // timestamp (microseconds)
-  bool is_occluded = false;
+  uint32_t time_us = 0.0;          // timestamp (microseconds)
  private:
 };
 
