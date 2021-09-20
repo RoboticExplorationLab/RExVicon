@@ -77,5 +77,26 @@ bool LibSerialCheck(enum sp_return result) {
     return true;
   }
 }
+
+int VerifyRead(char* buf, int len, uint8_t msg_id) {
+  int start_index;
+  uint8_t byte;
+  for (start_index = 0; start_index < len; ++start_index) {
+    byte = buf[start_index];
+    if (byte == msg_id) {
+      break;
+    }
+  }
+  if (start_index > 0) {
+    fmt::print("Not at begining of message, Trying to fix.\n");
+    int received_length = len - start_index;
+
+    // Shift the data over to the start of the buffer
+    for (int i = 0; i < received_length; ++i) {
+      buf[i] = buf[i + start_index];
+    }
+  }
+  return start_index;
+}
  
 } // namespace rexlab

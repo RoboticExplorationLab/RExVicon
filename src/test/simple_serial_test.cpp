@@ -17,7 +17,7 @@
 namespace rexlab {
 
 struct MyMsg {
-  uint8_t msgid = 91;
+  uint8_t msgid = 11;
   bool is_occluded = false;
   int x = 0;
   int y = 0;
@@ -81,43 +81,17 @@ void ReadWriteSerial(const std::string& port_name, int baud_rate, bool write = t
     if (write) {
       sp_blocking_write(port, buf, len, timeout_ms.count());
       has_started = true;
-      // fmt::print("Message ({} bytes):\n", num_bytes);
-      // for (int j = 0; j < len; ++j) {
-      //   fmt::print("  Byte {}: {:#x}\n", j, buf[j]);
-      // }
-      // fmt::print("\n");
       ++data;
       sp_drain(port);
-      // usleep(1000 * 1000 / 300);
+      // fmt::print("Writing to serial: {}\n", data.x);
+      // usleep(1000 * 1000 / 120);
     } else {
       sp_blocking_read(port, buf, len, timeout_ms.count());
-      uint8_t msgid = buf[0];
-      int j;
-      for (j = 0; j < len; ++j) {
-        msgid = buf[j];
-        if (msgid == 91) {
-          break;
-        }
+      int extra_bytes = VerifyRead(buf, len, 91);
+      if (extra_bytes) {
+        sp_blocking_read(port, buf + len - extra_bytes - 1, extra_bytes, timeout_ms.count());
       }
-      if (j != 0) {
-        fmt::print("Not at beginning of message. Trying to fix.\n");
-        ++receive_fixes;
-        int received_length = len - j;
 
-        // Shift the data over to the start of the buffer
-        for (int i = 0; i < received_length; ++i) {
-          buf[i] = buf[i+j];
-        }
-
-        // Read more bytes to complete the message
-        sp_blocking_read(port, buf + received_length - 1, j, timeout_ms.count());
-      }
-      // fmt::print("MsgID: {:#x} at byte {}\n", msgid, j);
-      // fmt::print("Message ({} bytes):\n", num_bytes);
-      // for (int j = 0; j < len; ++j) {
-      //   fmt::print("  Byte {}: {:#x}\n", j, buf[j]);
-      // }
-      // fmt::print("\n");
       if (!has_started) {
         t_start = std::chrono::high_resolution_clock::now();
         timeout_ms = std::chrono::milliseconds(500);
@@ -156,8 +130,12 @@ int main (int argc, char* argv[]) {
       write = false;
       port_index = 1; 
     }
+
   }
   std::vector<std::string> port_list = rexlab::GetPortList();
+  if (port_list[0] == "/dev/ttyACM0") {
+    port_index += 1;
+  }
   for (const auto& name : port_list) {
     fmt::print("Got Port {}\n", name);
   }

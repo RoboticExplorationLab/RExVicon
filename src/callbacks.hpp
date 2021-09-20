@@ -1,11 +1,14 @@
 #pragma once
 
-#include <fmt/core.h>
-#include <fmt/ostream.h>
 
-#include <boost/asio.hpp>
+#include <chrono>
 #include <iostream>
 #include <string>
+
+#include <boost/asio.hpp>
+#include <fmt/core.h>
+#include <fmt/ostream.h>
+#include <libserialport.h>
 #include <zmq.hpp>
 
 #include "src/pose.hpp"
@@ -16,10 +19,17 @@ namespace rexlab {
 class SerialCallback {
  public:
   SerialCallback(const std::string& port_name, int baudrate);
-  void Open();
-  bool IsOpen() { return serial_port_.is_open(); }
+  bool Open();
+  bool IsOpen() { return is_open_; }
   void Close();
   bool WriteBytes(const char* data, size_t size);
+  void SetTimeout(int time_ms);
+
+  template <class Duration>
+  void SetTimeout(Duration time) {
+    timeout_ = time;
+  }
+
 
   template <class T>
   void operator()(const Pose<T>& pose) {
@@ -29,9 +39,9 @@ class SerialCallback {
  private:
   std::string port_name_;
   int baud_rate_;
-  boost::asio::io_service io_;
-  boost::asio::serial_port serial_port_;
-  size_t bytes_transferred_;
+  struct sp_port* port_;
+  bool is_open_ = false;
+  std::chrono::milliseconds timeout_;
 };
 
 class PrintCallback {

@@ -1,29 +1,45 @@
 #include "src/callbacks.hpp"
 #include <zmq.hpp>
 
+#include "src/utils.hpp"
+
 namespace rexlab {
 
 SerialCallback::SerialCallback(const std::string &port_name, int baud_rate)
     : port_name_(port_name),
-      baud_rate_(baud_rate),
-      io_(),
-      serial_port_(io_) {}
+      baud_rate_(baud_rate) {}
 
-void SerialCallback::Open() {
-  serial_port_.open(port_name_);
-  serial_port_.set_option(boost::asio::serial_port_base::baud_rate(baud_rate_));
+bool SerialCallback::Open() {
+  try {
+    LibSerialCheck(sp_get_port_by_name(port_name_.c_str(), &port_));
+    LibSerialCheck(sp_open(port_, SP_MODE_READ_WRITE));
+    fmt::print("Connected to port {}\n", port_name_);
+    fmt::print("            Name: {}\n", sp_get_port_name(port_));
+    fmt::print("     Description: {}\n", sp_get_port_description(port_));
+    return true;
+  } catch(const LibSerialPortError& e) {
+    fmt::print("Error Calling libserialport\n");
+    fmt::print("Got error: ", e.what());
+  }
+  return false;
 }
 
 void SerialCallback::Close() {
   if (IsOpen()) {
-    serial_port_.close();
+    sp_close(port_);
+    sp_free_port(port_);
+    is_open_ = false;
   }
+}
+
+void SerialCallback::SetTimeout(int time_ms) {
+  timeout_ = std::chrono::milliseconds(time_ms);
 }
 
 bool SerialCallback::WriteBytes(const char* data, size_t size) {
   fmt::print("Writing to serial...\n");
   if (IsOpen()) {
-    serial_port_.write_some(boost::asio::buffer(data, size));
+    sp_blocking_write(port_, data, size, timeout_.count());
     return true;
   }
   return false;
