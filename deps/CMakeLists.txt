@@ -24,8 +24,6 @@ if (${${OPTION_PREFIX}_BUILD_TESTS})
 endif()
 
 
-find_package(Boost REQUIRED)
-
 find_package(ViconSDK REQUIRED)
 add_library(ViconSDK3 INTERFACE)
 target_link_libraries(ViconSDK3

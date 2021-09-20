@@ -2,7 +2,6 @@
 #include <iostream>
 #include <limits>
 
-#include <boost/asio.hpp>
 #include <fmt/core.h>
 #include <gtest/gtest.h>
 

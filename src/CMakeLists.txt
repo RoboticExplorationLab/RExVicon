@@ -55,10 +55,6 @@ set_target_properties(rexvicon_driver PROPERTIES
   OUTPUT_NAME vicon_driver # sets the name of the installed library
   EXPORT_NAME vicon_driver # sets the name of the imported target
 )
-target_include_directories(rexvicon_driver
-  PUBLIC
-  ${Boost_INLCUDE_DIRS}
-)
 
 # Install the library
 install(TARGETS rexvicon_driver 

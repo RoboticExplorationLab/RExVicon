@@ -5,7 +5,6 @@
 #include <iostream>
 #include <string>
 
-#include <boost/asio.hpp>
 #include <fmt/core.h>
 #include <fmt/ostream.h>
 #include <libserialport.h>
