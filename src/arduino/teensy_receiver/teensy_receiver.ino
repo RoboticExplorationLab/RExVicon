@@ -1,18 +1,20 @@
 #include "receiver.hpp"
+#include "pose.hpp"
 
-struct ViconMsg {
-  static constexpr uint8_t MsgID() { return 11; }
-  uint8_t msgid = MsgID();
-  bool is_occluded = false;
-  uint16_t position_scale = 10000;
-  int position_x;
-  int position_y;
-  int position_z;
-  int quaternion_w;
-  int quaternion_x;
-  int quaterioon_y;
-  int quaternion_z;
-};
+//struct ViconMsg {
+//  static constexpr uint8_t MsgID() { return 11; }
+//  uint8_t msgid = MsgID();
+//  bool is_occluded = false;
+//  uint16_t position_scale = 10000;
+//  int position_x;
+//  int position_y;
+//  int position_z;
+//  int quaternion_w;
+//  int quaternion_x;
+//  int quaternion_y;
+//  int quaternion_z;
+//};
+using ViconMsg = rexlab::Pose<int32_t>;
 
 // Global Parameters
 float rate_print_frequency = 1.0;  // frequency at which to print the averaged rate
@@ -29,7 +31,6 @@ rexlab::SerialReceiver receiver(HolybroRadio, ViconMsg::MsgID());
 void setup() {
   receiver.Init();
   receiver.EnableRatePrinting(rate_print_frequency);
-  
   // initialize digital pin LED_BUILTIN as an output.
   pinMode(LED_BUILTIN, OUTPUT);
   HolybroRadio.begin(57600);

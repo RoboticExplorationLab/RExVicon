@@ -11,7 +11,7 @@
 #include <libserialport.h>
 #include <zmq.hpp>
 
-#include "src/pose.hpp"
+#include "src/arduino/teensy_receiver/pose.hpp" 
 #include "src/utils.hpp"
 
 namespace rexlab {

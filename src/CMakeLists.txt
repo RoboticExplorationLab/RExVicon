@@ -35,8 +35,7 @@ add_library(rexvicon_driver
   vicon_driver.hpp
   vicon_driver.cpp
 
-  pose.hpp
-  pose.cpp
+  arduino/teensy_receiver/pose.hpp
 
   callbacks.hpp
   callbacks.cpp

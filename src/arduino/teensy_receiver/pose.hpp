@@ -24,7 +24,7 @@ constexpr T GetUnitQuaternionScalar() {
 template <class T>
 struct Pose {
  public:
-  static constexpr uint8_t kMsgID = 11;
+  static constexpr uint8_t MsgID() { return 11; }
 
   static_assert(std::is_signed<T>::value || std::is_floating_point<T>::value, "Invalid data type, must be a float or a signed integer");
 
@@ -44,7 +44,7 @@ struct Pose {
   const char* GetData() const { return reinterpret_cast<const char*>(this); }
   static constexpr int NumBytes() { return 7 * sizeof(T) + 4 + 4; }
 
-  const uint8_t msgid = kMsgID;
+  const uint8_t msgid = MsgID();
   bool is_occluded = false;
   uint16_t position_scale = 1000;  // in millimeters (max ~65m)
   T position_x = 0;

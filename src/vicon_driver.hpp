@@ -6,7 +6,7 @@
 #include <map>
 
 #include "DataStreamClient.h"
-#include "src/pose.hpp"
+#include "src/arduino/teensy_receiver/pose.hpp" 
 
 namespace rexlab {
 

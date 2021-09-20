@@ -3,7 +3,7 @@
 #include <limits>
 #include <fmt/core.h>
 
-#include "src/pose.hpp"
+#include "src/arduino/teensy_receiver/pose.hpp"
 #include "src/vicon_driver.hpp"
 
 namespace rexlab {

@@ -7,7 +7,7 @@
 #include <fmt/chrono.h>
 #include <fmt/ostream.h>
 
-#include "src/pose.hpp"
+#include "src/arduino/teensy_receiver/pose.hpp"
 // #include "src/vicon_driver.hpp"
 // #include "src/callbacks.hpp"
 #include "src/utils.hpp"
@@ -59,7 +59,8 @@ void ReadWriteSerial(const std::string& port_name, int baud_rate, bool write = t
   LibSerialCheck(sp_set_stopbits(port, 1));
   LibSerialCheck(sp_set_flowcontrol(port, SP_FLOWCONTROL_NONE));
 
-  MyMsg data;
+  // MyMsg data;
+  Pose<int32_t> data;
   int len = sizeof(data);
   char* buf = reinterpret_cast<char*>(&data);
   std::chrono::duration<unsigned int, std::milli> timeout_ms(10000);
@@ -81,7 +82,7 @@ void ReadWriteSerial(const std::string& port_name, int baud_rate, bool write = t
     if (write) {
       sp_blocking_write(port, buf, len, timeout_ms.count());
       has_started = true;
-      ++data;
+      ++data.position_x;
       sp_drain(port);
       // fmt::print("Writing to serial: {}\n", data.x);
       // usleep(1000 * 1000 / 120);
@@ -106,7 +107,7 @@ void ReadWriteSerial(const std::string& port_name, int baud_rate, bool write = t
   }
   fmt::print("\n");
 
-  fmt::print("Final data value: {}\n", data.x);
+  fmt::print("Final data value: {}\n", data.position_x);
   auto t_total = std::chrono::duration_cast<std::chrono::duration<double, std::ratio<1>>>(
       std::chrono::high_resolution_clock::now() - t_start); 
   double rate = count / t_total.count();
