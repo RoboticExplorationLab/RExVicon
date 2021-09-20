@@ -1,11 +1,35 @@
 #include "src/utils.hpp"
 
 #include <fmt/core.h>
+#include <fmt/chrono.h>
 #include <libserialport.h>
 
 namespace rexlab {
 
+void RatePrinter::Init() {
+  time_start_ = std::chrono::high_resolution_clock::now();
+  count_ = 0;
+}
 
+void RatePrinter::Enable() { is_enabled_ = true; }
+void RatePrinter::Disable() { is_enabled_ = false; }
+bool RatePrinter::IsEnabled() { return is_enabled_; } 
+void RatePrinter::SetFrequency(float frequency) { 
+  period_ = std::chrono::duration<double, std::ratio<1>>(1.0 / frequency);
+}
+void RatePrinter::Print() {
+  if (IsEnabled()) {
+    std::chrono::duration<double, std::ratio<1>> t_elapsed = std::chrono::high_resolution_clock::now() - time_start_;
+    if (t_elapsed > period_) {
+      double average_rate = count_ / t_elapsed.count();
+      fmt::print("Average rate: {} Hz\n", average_rate);
+      count_ = 0;
+      time_start_ = std::chrono::high_resolution_clock::now();
+    }
+    ++count_;
+  }
+}
+ 
 std::string MakeTcpAddress(const std::string& addr) {
   std::string tcp_addr;
   if (addr.rfind("tcp://") == 0) {

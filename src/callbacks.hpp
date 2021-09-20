@@ -78,7 +78,7 @@ class ZMQCallback {
       socket_.bind(addr_.ToString());
       fmt::print("Publisher successfully bound to {}\n", addr_.ToString());
     } catch(const zmq::error_t& e) {
-      fmt::print("Error binding publisher to port {}\n", port_name_);
+      fmt::print("Error binding publisher to port {}\n", addr_.ToString());
       throw(e);
     }
   }
@@ -102,7 +102,9 @@ class SerialZMQCallback {
 
   template <class... Args>
   SerialZMQCallback(const std::string& port_name, int baudrate, Args... args) 
-      : zmq_(std::forward<Args>(args)...), ser_(port_name, baudrate) {}
+      : zmq_(std::forward<Args>(args)...), ser_(port_name, baudrate) {
+    ser_.Open();
+  }
 
   template <class T>
   void operator()(const Pose<T>& pose) {

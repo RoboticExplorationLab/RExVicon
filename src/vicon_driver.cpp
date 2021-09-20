@@ -1,22 +1,24 @@
 #include "src/vicon_driver.hpp"
 
+#include <fmt/core.h>
+
 #include <chrono>
 #include <iostream>
 
-#include <fmt/core.h>
+#include "src/utils.hpp"
 
 namespace rexlab {
 
 namespace {
-  
-void ConvertViconToPose(const ViconSDK::Output_GetSegmentGlobalTranslation& trans, 
-                        const ViconSDK::Output_GetSegmentGlobalRotationQuaternion& rot,
-                        Pose<float>* pose) {
 
+void ConvertViconToPose(
+    const ViconSDK::Output_GetSegmentGlobalTranslation& trans,
+    const ViconSDK::Output_GetSegmentGlobalRotationQuaternion& rot,
+    Pose<float>* pose) {
   // Convert mm translation to meters
-  pose->position_x = trans.Translation[0] * 0.001; 
-  pose->position_y = trans.Translation[1] * 0.001; 
-  pose->position_z = trans.Translation[2] * 0.001; 
+  pose->position_x = trans.Translation[0] * 0.001;
+  pose->position_y = trans.Translation[1] * 0.001;
+  pose->position_z = trans.Translation[2] * 0.001;
 
   // Convert scalar last to scalar first
   pose->quaternion_w = rot.Rotation[3];
@@ -26,8 +28,7 @@ void ConvertViconToPose(const ViconSDK::Output_GetSegmentGlobalTranslation& tran
   pose->is_occluded = trans.Occluded || rot.Occluded;
 }
 
-} // namespace
-
+}  // namespace
 
 ViconDriver::ViconDriver() : client_(), is_running_(false), opts_() {}
 
@@ -42,22 +43,28 @@ bool ViconDriver::Initialize(const ViconDriverOptions& opts) {
 
   client_.Connect(opts.server_id);
   if (!client_.IsConnected().Connected) {
-    std::cerr << "Failed to connect to Vicon server at " << opts.server_id << std::endl;
+    std::cerr << "Failed to connect to Vicon server at " << opts.server_id
+              << std::endl;
     return false;
   }
 
   client_.SetStreamMode(opts.stream_mode);
-  client_.SetAxisMapping(ViconSDK::Direction::Forward, ViconSDK::Direction::Left, 
-                         ViconSDK::Direction::Up);
+  client_.SetAxisMapping(ViconSDK::Direction::Forward,
+                         ViconSDK::Direction::Left, ViconSDK::Direction::Up);
   return true;
 }
 
-bool ViconDriver::AddCallback(const std::string& subject_name, const CallbackFunction& callback) {
+bool ViconDriver::AddCallback(const std::string& subject_name,
+                              const CallbackFunction& callback) {
   auto pair = callbacks_.emplace(std::make_pair(subject_name, callback));
   return pair.second;
 }
 
 void ViconDriver::RunLoop() {
+  RatePrinter rate_printer;
+  rate_printer.Enable();
+  bool did_call_init = false;
+
   client_.EnableSegmentData();
 
   Pose<float> pose;
@@ -71,9 +78,14 @@ void ViconDriver::RunLoop() {
     bool warmup_is_done = Warmup();
     if (!warmup_is_done) {
       continue;
+    } else if (!did_call_init) {
+      rate_printer.Init();
+      did_call_init = true;
     }
 
     // Loop over all of the subjects
+    // This should only be equal to the number of subjects activated in the
+    // Vicon software
     int n_subjects = client_.GetSubjectCount().SubjectCount;
     for (int i = 0; i < n_subjects; i++) {
       std::string subject_name = client_.GetSubjectName(i).SubjectName;
@@ -82,15 +94,20 @@ void ViconDriver::RunLoop() {
       callback_iterator = callbacks_.find(subject_name);
       if (callback_iterator != callbacks_.end()) {
         // Get the VICON translation and rotation data
-        std::string segment_name = client_.GetSegmentName(subject_name, 0).SegmentName;
-        auto trans = client_.GetSegmentGlobalTranslation(subject_name, segment_name);
-        auto rot = client_.GetSegmentGlobalRotationQuaternion(subject_name, segment_name);
+        std::string segment_name =
+            client_.GetSegmentName(subject_name, 0).SegmentName;
+        auto trans =
+            client_.GetSegmentGlobalTranslation(subject_name, segment_name);
+        auto rot = client_.GetSegmentGlobalRotationQuaternion(subject_name,
+                                                              segment_name);
 
         if (trans.Result != ViconSDK::Result::Success) {
-          std::cerr << "Translation get failed for " << subject_name << "::" << segment_name << std::endl;
+          std::cerr << "Translation get failed for " << subject_name
+                    << "::" << segment_name << std::endl;
         }
         if (rot.Result != ViconSDK::Result::Success) {
-          std::cerr << "Rotation get failed for " << subject_name << "::" << segment_name << std::endl;
+          std::cerr << "Rotation get failed for " << subject_name
+                    << "::" << segment_name << std::endl;
         }
 
         // Convert to Pose type
@@ -101,30 +118,25 @@ void ViconDriver::RunLoop() {
         const CallbackFunction& callback = callback_iterator->second;
         callback(pose);
       }
-    } // end for
-  } // end while
+    }  // end for
+    rate_printer.Print();
+  }  // end while
 }
 
 bool ViconDriver::Warmup() {
-  auto result = client_.GetFrame().Result;
-
-  ViconSDK::Result::Enum getframe_result = client_.GetFrame().Result;
-
-  if (getframe_result != ViconSDK::Result::Success) {
-    std::cerr << "ViconSDK GetFrame did not return success: " << result << std::endl;
+  auto getframe_result = client_.GetFrame();
+  if (getframe_result.Result != ViconSDK::Result::Success) {
+    std::cerr << "ViconSDK GetFrame did not return success: " << getframe_result.Result 
+              << std::endl;
     return false;
   }
 
   // Wait 1 second to flush the buffer in ServerPush mode
   double framerate = client_.GetFrameRate().FrameRateHz;
-  if (!ready_for_init_)
-  {
-    if (++wait_for_buffer_counter_ > framerate)
-    {
+  if (!ready_for_init_) {
+    if (++wait_for_buffer_counter_ > framerate) {
       ready_for_init_ = true;
-    }
-    else
-    {
+    } else {
       return false;
     }
   }
@@ -133,24 +145,34 @@ bool ViconDriver::Warmup() {
   // Proposed strategy: subtract latency from timecode
   ViconSDK::Output_GetTimecode timecode = client_.GetTimecode();
   if (timecode.Result != ViconSDK::Result::Success) {
-    std::cerr << "ViconSDK GetTimeCode did not return success: " << result << std::endl;
-    return false;
+    std::cerr << "ViconSDK GetTimeCode did not return success: "
+              << timecode.Result;
   }
 
   // Convert Timecode to seconds
-  double timecode_time = timecode.Hours * 3600.0 + timecode.Minutes * 60.0 + timecode.Seconds + (timecode.Frames * timecode.SubFramesPerFrame + timecode.SubFrame) / framerate;
+  double timecode_time =
+      timecode.Hours * 3600.0 + timecode.Minutes * 60.0 + timecode.Seconds +
+      (timecode.Frames * timecode.SubFramesPerFrame + timecode.SubFrame) /
+          framerate;
 
-  // Is this the first time we're seeing data? If so, initialise timecode_offset_
-  // TODO: Determine average round trip network delay in a separate slower thread and save in network_lag_estimate_?
+  // Is this the first time we're seeing data? If so, initialise
+  // timecode_offset_
+  // TODO: Determine average round trip network delay in a separate slower
+  // thread and save in network_lag_estimate_?
   // TODO: Also add jump logic here since timecode rotates every 24 hours...
-  if (timecode_offset_ == 0.0)
-  {
-    auto time_now_sys = std::chrono::high_resolution_clock::now().time_since_epoch();
-    double time_now = std::chrono::duration_cast<std::chrono::duration<double, std::ratio<1>>>(time_now_sys).count();
+  if (timecode_offset_ == 0.0) {
+    auto time_now_sys =
+        std::chrono::high_resolution_clock::now().time_since_epoch();
+    double time_now =
+        std::chrono::duration_cast<
+            std::chrono::duration<double, std::ratio<1>>>(time_now_sys)
+            .count();
     timecode_offset_ = time_now - network_lag_estimate_ - timecode_time;
-    printf("Timecode offset :: %.8f Time:: %.8f Timecode %.8f lag :: %f\n", timecode_offset_, time_now, timecode_time, network_lag_estimate_);
+    printf("Timecode offset :: %.8f Time:: %.8f Timecode %.8f lag :: %f\n",
+           timecode_offset_, time_now, timecode_time, network_lag_estimate_);
   }
-  // Move the timecode to the client (our) clock, and subtract the vicon system estimated latency from it.
+  // Move the timecode to the client (our) clock, and subtract the vicon
+  // system estimated latency from it.
   time_s_ = timecode_time + timecode_offset_ - client_.GetLatencyTotal().Total;
 
   return true;
@@ -166,10 +188,11 @@ Pose<float> ViconDriver::TestSubject(const std::string& subject) {
 
   is_running_.store(true);
   fmt::print("Starting ViconDriver Loop...\n");
-  while (!Warmup()) {}
+  while (!Warmup()) {
+  }
+  fmt::print("Finished warmup\n");
 
-
-  // Find the subject 
+  // Find the subject
   int n_subjects = client_.GetSubjectCount().SubjectCount;
   std::string subject_name;
   int subject_index = 0;
@@ -181,19 +204,26 @@ Pose<float> ViconDriver::TestSubject(const std::string& subject) {
       break;
     }
   }
+  fmt::print("Found subject {} at index {}\n", subject_name, subject_index);
   if (subject_index == n_subjects) {
-    throw(std::runtime_error(fmt::format("Couldn't find a object of name {}\n", subject)));
+    throw(std::runtime_error(
+        fmt::format("Couldn't find a object of name {}\n", subject)));
   }
 
   // Get the VICON translation and rotation data
-  std::string segment_name = client_.GetSegmentName(subject_name, 0).SegmentName;
+  std::string segment_name =
+      client_.GetSegmentName(subject_name, 0).SegmentName;
   auto trans = client_.GetSegmentGlobalTranslation(subject_name, segment_name);
-  auto rot = client_.GetSegmentGlobalRotationQuaternion(subject_name, segment_name);
+  auto rot =
+      client_.GetSegmentGlobalRotationQuaternion(subject_name, segment_name);
 
   if (trans.Result != ViconSDK::Result::Success) {
-    std::cerr << "Translation get failed for " << subject_name << "::" << segment_name << std::endl;
-  } if (rot.Result != ViconSDK::Result::Success) {
-    std::cerr << "Rotation get failed for " << subject_name << "::" << segment_name << std::endl;
+    std::cerr << "Translation get failed for " << subject_name
+              << "::" << segment_name << std::endl;
+  }
+  if (rot.Result != ViconSDK::Result::Success) {
+    std::cerr << "Rotation get failed for " << subject_name
+              << "::" << segment_name << std::endl;
   }
 
   // Convert to Pose type

@@ -27,10 +27,4 @@ void setup() {
 // the loop function runs over and over again forever
 void loop() {
   bool msg_received = receiver.Receive(buf, BUFLEN);
-  if (msg_received) {
-    if (msg.position_x - x_prev > 1) {
-      Serial.print("Dropped message!!!\n");
-    }
-    x_prev = msg.position_x;
-  }
 }
