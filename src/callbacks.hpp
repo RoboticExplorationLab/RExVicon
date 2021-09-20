@@ -99,6 +99,17 @@ class ZMQCallback {
 
 class SerialZMQCallback {
  public:
+
+  template <class... Args>
+  SerialZMQCallback(const std::string& port_name, int baudrate, Args... args) 
+      : zmq_(std::forward<Args>(args)...), ser_(port_name, baudrate) {}
+
+  template <class T>
+  void operator()(const Pose<T>& pose) {
+    zmq_(pose);
+    ser_(pose);
+  }
+
  private:
   ZMQCallback zmq_;
   SerialCallback ser_;

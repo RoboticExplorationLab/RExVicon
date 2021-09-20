@@ -1,4 +1,3 @@
-
 FetchContent_Declare(libzmq
   GIT_REPOSITORY https://github.com/zeromq/libzmq
   GIT_TAG 4097855ddaaa65ed7b5e8cb86d143842a594eebd # version 4.3.4

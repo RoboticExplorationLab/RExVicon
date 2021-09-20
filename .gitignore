@@ -1,3 +1,4 @@
 ViconSDK/
-!ViconSDK/CMakeLists.txt
+!ViconSDK/README.md
+*build*/
 build

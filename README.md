@@ -9,3 +9,14 @@ Install the Boost library:
 ```shell
 sudo apt-get install libboost-all-dev
 ```
+
+### Install on RPi3
+Download ViconSDK
+clone libserialport
+```
+sudo apt-get install autoconf
+git clone git://sigrok.org/libserialport
+cd libserialport
+./autogen
+./configu
+```

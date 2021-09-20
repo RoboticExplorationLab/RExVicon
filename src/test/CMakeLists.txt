@@ -1,9 +1,9 @@
-find_package(PkgConfig)
-pkg_check_modules(LIBSP libserialport)
-cmake_print_variables(LIBSP_VERSION)
-cmake_print_variables(LIBSP_LIBRARIES)
-cmake_print_variables(LIBSP_LINK_LIBRARIES)
-cmake_print_variables(LIBSP_LIBRARY_DIRS)
+# find_package(PkgConfig)
+# pkg_check_modules(LIBSP libserialport)
+# cmake_print_variables(LIBSP_VERSION)
+# cmake_print_variables(LIBSP_LIBRARIES)
+# cmake_print_variables(LIBSP_LINK_LIBRARIES)
+# cmake_print_variables(LIBSP_LIBRARY_DIRS)
 
 function(rexvicon_test test_name)
   add_executable(${test_name}

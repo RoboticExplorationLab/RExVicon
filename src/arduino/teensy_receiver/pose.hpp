@@ -40,6 +40,33 @@ struct Pose {
         quaternion_x(qx),
         quaternion_y(qy),
         quaternion_z(qz) {}
+  
+  Pose(const Pose& other)
+      : is_occluded(other.is_occluded),
+        position_scale(other.position_scale),
+        position_x(other.position_x),
+        position_y(other.position_y),
+        position_z(other.position_z),
+        quaternion_w(other.quaternion_w),
+        quaternion_x(other.quaternion_x),
+        quaternion_y(other.quaternion_y),
+        quaternion_z(other.quaternion_z),
+        time_us(other.time_us) {}
+
+  Pose& operator=(const Pose& other) {
+    is_occluded = other.is_occluded;
+    position_scale = other.position_scale;
+    position_x = other.position_x;
+    position_y = other.position_y;
+    position_z = other.position_z;
+    quaternion_w = other.quaternion_w;
+    quaternion_x = other.quaternion_x;
+    quaternion_y = other.quaternion_y;
+    quaternion_z = other.quaternion_z;
+    time_us = other.time_us;
+    return *this;
+  }
+
   char* GetData() { return reinterpret_cast<char*>(this); }
   const char* GetData() const { return reinterpret_cast<const char*>(this); }
   static constexpr int NumBytes() { return 7 * sizeof(T) + 4 + 4; }

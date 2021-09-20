@@ -10,11 +10,6 @@ include_directories(
 
 find_package(PkgConfig)
 pkg_check_modules(LIBSP libserialport)
-cmake_print_variables(LIBSP_VERSION)
-cmake_print_variables(LIBSP_LIBRARIES)
-cmake_print_variables(LIBSP_LINK_LIBRARIES)
-cmake_print_variables(LIBSP_LIBRARY_DIRS)
-
 add_library(libserialport INTERFACE)
 target_link_libraries(libserialport
   INTERFACE
@@ -48,9 +43,9 @@ add_library(rexvicon_driver
 target_link_libraries(rexvicon_driver
   PUBLIC
   cppzmq
+  ViconSDK::ViconSDK
 
   PRIVATE
-  ViconSDK::ViconSDK
   fmt::fmt
   libserialport
 )
@@ -70,6 +65,15 @@ install(TARGETS rexvicon_driver
   EXPORT RExVicon_export # add to the export set
 )
 
+# Main executable
+add_executable(rexvicon
+  main.cpp
+)
+target_link_libraries(rexvicon
+  PRIVATE
+  rexvicon_driver
+  fmt::fmt
+)
 
 # Add tests
 add_subdirectory(test)

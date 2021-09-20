@@ -38,14 +38,21 @@ class ViconDriver {
   void ClearCallbacks() { callbacks_.clear(); }
   void RunLoop();
   void Stop();
+  Pose<float> TestSubject(const std::string& subject);
 
  private:
+  bool Warmup();
+
   ViconSDK::Client client_;
   std::atomic<bool> is_running_;
   double timecode_offset_ = 0.0;
   double network_lag_estimate_ = 0.0;
   std::map<std::string, CallbackFunction> callbacks_;
   ViconDriverOptions opts_;
+
+  double time_s_ = 0.0;
+  bool ready_for_init_ = false;
+  int wait_for_buffer_counter_ = 0;
 };
 
 }  // namespace rexlab
