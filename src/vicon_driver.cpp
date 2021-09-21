@@ -41,11 +41,18 @@ ViconDriver::~ViconDriver() {
 bool ViconDriver::Initialize(const ViconDriverOptions& opts) {
   opts_ = opts;
 
-  client_.Connect(opts.server_id);
-  if (!client_.IsConnected().Connected) {
-    std::cerr << "Failed to connect to Vicon server at " << opts.server_id
-              << std::endl;
-    return false;
+  if (opts.wait_to_connect) {
+    fmt::print("Waiting for the Vicon to connect...\n");
+    while (!client_.IsConnected().Connected) {
+      client_.Connect(opts.server_id);
+    }
+  } else {
+    client_.Connect(opts.server_id);
+    if (!client_.IsConnected().Connected) {
+      std::cerr << "Failed to connect to Vicon server at " << opts.server_id
+                << std::endl;
+      return false;
+    }
   }
 
   client_.SetStreamMode(opts.stream_mode);

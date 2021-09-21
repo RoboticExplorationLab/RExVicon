@@ -1,7 +1,8 @@
+#include <unistd.h>
+#include <iostream>
+
 #include <fmt/core.h>
 #include <fmt/ostream.h>
-
-#include <iostream>
 
 #include "src/callbacks.hpp"
 #include "src/vicon_driver.hpp"
@@ -10,13 +11,13 @@ namespace rexlab {
 
 const std::string kViconServerAddress = "192.168.3.249";
 
-bool IsConnectedToVicon() {
+bool IsConnectedToVicon(const std::string& subject_name, bool wait_to_connect = false) {
   ViconDriver driver;
   ViconDriverOptions opts;
-  opts.server_id = "192.168.3.249";
+  opts.wait_to_connect = wait_to_connect;
+  opts.server_id = kViconServerAddress;
   driver.Initialize(opts);
 
-  std::string subject_name = "rex1";
   if (driver.IsConnected()) {
     Pose<float> pose;
     try {
@@ -55,9 +56,10 @@ void Run(const std::string& port_name, int baud_rate,
 int main(int argc, char* argv[]) {
   std::string port_name = "/dev/ttyUSB0";
   int baud_rate = 57600;
-  std::string ip_addr = "127.0.0.1"; 
+  std::string ip_addr = "192.168.3.134"; 
   int port = 5555; 
   std::string subject = "rex1";
+  bool wait_to_connect = false;
 
   std::vector<std::string> args;
   for (int i = 0; i < argc; ++i) {
@@ -79,10 +81,13 @@ int main(int argc, char* argv[]) {
     if (*it == "-t" || *it == "--subject") {
       subject = *(++it);
     }
+    if (*it == "-w" || *it == "--wait") {
+		  wait_to_connect = true;	
+    }
   }
 
   std::cout << "This is the RExLab Vicon Driver\n";
-  rexlab::IsConnectedToVicon();
+  rexlab::IsConnectedToVicon(subject, wait_to_connect);
   rexlab::Run(port_name, baud_rate, ip_addr, port, subject);
   return 0;
 }
