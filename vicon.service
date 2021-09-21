@@ -1,0 +1,10 @@
+[Unit]
+After=network.target
+Description="Vicon Service" [Service]
+[Service]
+ExecStart=/home/karush/RExVicon/build/src/rexvicon --wait
+User=vicon
+CPUSchedulingPolicy=fifo
+CPUSchedulingPriority=99
+[Install]
+WantedBy=multi-user.target
