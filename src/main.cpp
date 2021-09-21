@@ -22,6 +22,8 @@ bool IsConnectedToVicon() {
     try {
       pose = driver.TestSubject(subject_name);
       fmt::print("Got pose:\n{}\n", pose);
+      Pose<int32_t> msg = ConvertPoseFloatToInt<int32_t>(pose);
+      fmt::print("Vicon Msg:\n{}\n", msg);
     } catch (std::runtime_error& e) {
       fmt::print("FAIL: Failed to get the pose for subject {}\n", subject_name);
       return false;

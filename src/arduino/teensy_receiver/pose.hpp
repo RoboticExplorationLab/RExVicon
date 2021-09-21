@@ -105,6 +105,23 @@ Pose<Tfloat> ConvertPoseIntToFloat(const Pose<Tint>& pint) {
   return pfloat;
 }
 
+template <class Tfloat, class Tint>
+void ConvertPoseIntToFloat(const Pose<Tint>& pint, Pose<Tfloat>* pfloat) {
+  static_assert(std::is_signed<Tint>::value, "Must provide a signed integer type");
+  static_assert(std::is_floating_point<Tfloat>::value, "Must provide a floating-base type");
+
+  constexpr Tint Tmax = std::numeric_limits<Tint>::max();
+  pfloat->position_x   = static_cast<Tfloat>((pint.position_x / static_cast<Tfloat>(Tmax)) * (pint.position_scale / 1000.0));
+  pfloat->position_y   = static_cast<Tfloat>((pint.position_y / static_cast<Tfloat>(Tmax)) * (pint.position_scale / 1000.0));
+  pfloat->position_z   = static_cast<Tfloat>((pint.position_z / static_cast<Tfloat>(Tmax)) * (pint.position_scale / 1000.0));
+  pfloat->quaternion_w = static_cast<Tfloat>(pint.quaternion_w / static_cast<Tfloat>(Tmax));
+  pfloat->quaternion_x = static_cast<Tfloat>(pint.quaternion_x / static_cast<Tfloat>(Tmax));
+  pfloat->quaternion_y = static_cast<Tfloat>(pint.quaternion_y / static_cast<Tfloat>(Tmax));
+  pfloat->quaternion_z = static_cast<Tfloat>(pint.quaternion_z / static_cast<Tfloat>(Tmax));
+  pfloat->position_scale = pint.position_scale;
+  pfloat->is_occluded = pint.is_occluded;
+}
+
 template <class Tint, class Tfloat>
 Tint ClampToInt(Tfloat f) {
   static_assert(std::is_signed<Tint>::value, "Can only clamp to signed integers");
@@ -139,6 +156,22 @@ Pose<Tint> ConvertPoseFloatToInt(const Pose<Tfloat>& pfloat) {
   return pint;
 }
 
+template <class Tint, class Tfloat>
+void ConvertPoseFloatToInt(const Pose<Tfloat>& pfloat, Pose<Tint>* pint) {
+  static_assert(std::is_signed<Tint>::value, "Must provide a signed integer type");
+  static_assert(std::is_floating_point<Tfloat>::value, "Must provide a floating-base type");
+
+  constexpr Tint Tmax = std::numeric_limits<Tint>::max();
+  pint->position_x   = ClampToInt<Tint>(pfloat.position_x * (1000.0 / static_cast<Tfloat>(pfloat.position_scale))  * Tmax);
+  pint->position_y   = ClampToInt<Tint>(pfloat.position_y * (1000.0 / static_cast<Tfloat>(pfloat.position_scale))  * Tmax);
+  pint->position_z   = ClampToInt<Tint>(pfloat.position_z * (1000.0 / static_cast<Tfloat>(pfloat.position_scale))  * Tmax);
+  pint->quaternion_w = ClampToInt<Tint>(pfloat.quaternion_w * Tmax); 
+  pint->quaternion_x = ClampToInt<Tint>(pfloat.quaternion_x * Tmax); 
+  pint->quaternion_y = ClampToInt<Tint>(pfloat.quaternion_y * Tmax); 
+  pint->quaternion_z = ClampToInt<Tint>(pfloat.quaternion_z * Tmax); 
+  pint->position_scale = pfloat.position_scale; 
+  pint->is_occluded = pfloat.is_occluded;
+}
 
 template <class T>
 std::ostream& operator<<(std::ostream& io, const Pose<T>& pose) {

@@ -29,10 +29,10 @@ class SerialCallback {
     timeout_ = time;
   }
 
-
   template <class T>
   void operator()(const Pose<T>& pose) {
-    WriteBytes(pose.GetData(), pose.NumBytes());
+    ConvertPoseFloatToInt(pose, &msg_);
+    WriteBytes(msg_.GetData(), msg_.NumBytes());
   }
 
  private:
@@ -41,6 +41,7 @@ class SerialCallback {
   struct sp_port* port_;
   bool is_open_ = false;
   std::chrono::milliseconds timeout_;
+  Pose<int32_t> msg_;
 };
 
 class PrintCallback {
