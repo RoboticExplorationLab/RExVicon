@@ -54,7 +54,7 @@ int main(int argc, char* argv[]) {
   std::string port_name = "/dev/ttyUSB0";
   int baud_rate = 57600;
   std::string ip_addr = "127.0.0.1"; 
-  int port = rexlab::TcpAddress::kAnyPort;
+  int port = 5555; 
   std::string subject = "rex1";
 
   std::vector<std::string> args;

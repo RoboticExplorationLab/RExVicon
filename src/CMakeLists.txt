@@ -72,4 +72,6 @@ target_link_libraries(rexvicon
 )
 
 # Add tests
-add_subdirectory(test)
+if (${OPTION_PREFIX}_BUILD_TESTS)
+  add_subdirectory(test)
+endif()
