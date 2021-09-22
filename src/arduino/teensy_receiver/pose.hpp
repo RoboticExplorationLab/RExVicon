@@ -21,6 +21,8 @@ constexpr T GetUnitQuaternionScalar() {
 
 } // namespace
 
+constexpr int kQuatScaling = 2;
+
 template <class T>
 struct Pose {
  public:
@@ -73,7 +75,7 @@ struct Pose {
 
   const uint8_t msgid = MsgID();
   bool is_occluded = false;
-  uint16_t position_scale = 1000;  // in millimeters (max ~65m)
+  uint16_t position_scale = 10000;  // in millimeters (max ~65m)
   T position_x = 0;
   T position_y = 0;
   T position_z = 0;
@@ -96,10 +98,10 @@ Pose<Tfloat> ConvertPoseIntToFloat(const Pose<Tint>& pint) {
     static_cast<Tfloat>((pint.position_x / static_cast<Tfloat>(Tmax)) * (pint.position_scale / 1000.0)),
     static_cast<Tfloat>((pint.position_y / static_cast<Tfloat>(Tmax)) * (pint.position_scale / 1000.0)),
     static_cast<Tfloat>((pint.position_z / static_cast<Tfloat>(Tmax)) * (pint.position_scale / 1000.0)),
-    static_cast<Tfloat>(pint.quaternion_w / static_cast<Tfloat>(Tmax)),
-    static_cast<Tfloat>(pint.quaternion_x / static_cast<Tfloat>(Tmax)),
-    static_cast<Tfloat>(pint.quaternion_y / static_cast<Tfloat>(Tmax)),
-    static_cast<Tfloat>(pint.quaternion_z / static_cast<Tfloat>(Tmax)),
+    static_cast<Tfloat>(pint.quaternion_w / static_cast<Tfloat>(Tmax) * kQuatScaling),
+    static_cast<Tfloat>(pint.quaternion_x / static_cast<Tfloat>(Tmax) * kQuatScaling),
+    static_cast<Tfloat>(pint.quaternion_y / static_cast<Tfloat>(Tmax) * kQuatScaling),
+    static_cast<Tfloat>(pint.quaternion_z / static_cast<Tfloat>(Tmax) * kQuatScaling),
     pint.position_scale, pint.is_occluded
   );
   return pfloat;
@@ -114,10 +116,10 @@ void ConvertPoseIntToFloat(const Pose<Tint>& pint, Pose<Tfloat>* pfloat) {
   pfloat->position_x   = static_cast<Tfloat>((pint.position_x / static_cast<Tfloat>(Tmax)) * (pint.position_scale / 1000.0));
   pfloat->position_y   = static_cast<Tfloat>((pint.position_y / static_cast<Tfloat>(Tmax)) * (pint.position_scale / 1000.0));
   pfloat->position_z   = static_cast<Tfloat>((pint.position_z / static_cast<Tfloat>(Tmax)) * (pint.position_scale / 1000.0));
-  pfloat->quaternion_w = static_cast<Tfloat>(pint.quaternion_w / static_cast<Tfloat>(Tmax));
-  pfloat->quaternion_x = static_cast<Tfloat>(pint.quaternion_x / static_cast<Tfloat>(Tmax));
-  pfloat->quaternion_y = static_cast<Tfloat>(pint.quaternion_y / static_cast<Tfloat>(Tmax));
-  pfloat->quaternion_z = static_cast<Tfloat>(pint.quaternion_z / static_cast<Tfloat>(Tmax));
+  pfloat->quaternion_w = static_cast<Tfloat>(pint.quaternion_w / static_cast<Tfloat>(Tmax) * kQuatScaling);
+  pfloat->quaternion_x = static_cast<Tfloat>(pint.quaternion_x / static_cast<Tfloat>(Tmax) * kQuatScaling);
+  pfloat->quaternion_y = static_cast<Tfloat>(pint.quaternion_y / static_cast<Tfloat>(Tmax) * kQuatScaling);
+  pfloat->quaternion_z = static_cast<Tfloat>(pint.quaternion_z / static_cast<Tfloat>(Tmax) * kQuatScaling);
   pfloat->position_scale = pint.position_scale;
   pfloat->is_occluded = pint.is_occluded;
 }
@@ -147,10 +149,10 @@ Pose<Tint> ConvertPoseFloatToInt(const Pose<Tfloat>& pfloat) {
     ClampToInt<Tint>(pfloat.position_x * (1000.0 / static_cast<Tfloat>(pfloat.position_scale))  * Tmax),
     ClampToInt<Tint>(pfloat.position_y * (1000.0 / static_cast<Tfloat>(pfloat.position_scale))  * Tmax),
     ClampToInt<Tint>(pfloat.position_z * (1000.0 / static_cast<Tfloat>(pfloat.position_scale))  * Tmax),
-    ClampToInt<Tint>(pfloat.quaternion_w * Tmax), 
-    ClampToInt<Tint>(pfloat.quaternion_x * Tmax), 
-    ClampToInt<Tint>(pfloat.quaternion_y * Tmax), 
-    ClampToInt<Tint>(pfloat.quaternion_z * Tmax), 
+    ClampToInt<Tint>(pfloat.quaternion_w * Tmax / kQuatScaling), 
+    ClampToInt<Tint>(pfloat.quaternion_x * Tmax / kQuatScaling), 
+    ClampToInt<Tint>(pfloat.quaternion_y * Tmax / kQuatScaling), 
+    ClampToInt<Tint>(pfloat.quaternion_z * Tmax / kQuatScaling), 
     pfloat.position_scale, pfloat.is_occluded
   );
   return pint;
@@ -165,10 +167,10 @@ void ConvertPoseFloatToInt(const Pose<Tfloat>& pfloat, Pose<Tint>* pint) {
   pint->position_x   = ClampToInt<Tint>(pfloat.position_x * (1000.0 / static_cast<Tfloat>(pfloat.position_scale))  * Tmax);
   pint->position_y   = ClampToInt<Tint>(pfloat.position_y * (1000.0 / static_cast<Tfloat>(pfloat.position_scale))  * Tmax);
   pint->position_z   = ClampToInt<Tint>(pfloat.position_z * (1000.0 / static_cast<Tfloat>(pfloat.position_scale))  * Tmax);
-  pint->quaternion_w = ClampToInt<Tint>(pfloat.quaternion_w * Tmax); 
-  pint->quaternion_x = ClampToInt<Tint>(pfloat.quaternion_x * Tmax); 
-  pint->quaternion_y = ClampToInt<Tint>(pfloat.quaternion_y * Tmax); 
-  pint->quaternion_z = ClampToInt<Tint>(pfloat.quaternion_z * Tmax); 
+  pint->quaternion_w = ClampToInt<Tint>(pfloat.quaternion_w * Tmax / kQuatScaling); 
+  pint->quaternion_x = ClampToInt<Tint>(pfloat.quaternion_x * Tmax / kQuatScaling); 
+  pint->quaternion_y = ClampToInt<Tint>(pfloat.quaternion_y * Tmax / kQuatScaling); 
+  pint->quaternion_z = ClampToInt<Tint>(pfloat.quaternion_z * Tmax / kQuatScaling); 
   pint->position_scale = pfloat.position_scale; 
   pint->is_occluded = pfloat.is_occluded;
 }

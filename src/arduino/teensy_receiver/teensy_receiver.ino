@@ -5,11 +5,12 @@ using ViconMsg = rexlab::Pose<int32_t>;
 
 // Global Parameters
 float rate_print_frequency = 1.0;  // frequency at which to print the averaged rate
+int position_scale = 10000;        // 10 m
 constexpr HardwareSerial& HolybroRadio = Serial5;
 
 // Global Variables
 constexpr int BUFLEN = sizeof(ViconMsg);
-ViconMsg msg;
+ViconMsg msg(position_scale);
 char* buf = reinterpret_cast<char*>(&msg);
 int x_prev = -1;
 rexlab::SerialReceiver receiver(HolybroRadio, ViconMsg::MsgID());

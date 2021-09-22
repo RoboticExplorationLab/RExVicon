@@ -15,7 +15,7 @@ namespace ViconSDK = ViconDataStreamSDK::CPP;
 struct ViconDriverOptions {
   std::string server_id = "localhost";
   ViconSDK::StreamMode::Enum stream_mode = ViconSDK::StreamMode::ServerPush;
-  int32_t position_scale = 1000; // in mm
+  int32_t position_scale = 10000; // in mm
   bool wait_to_connect = false;
 };
 
