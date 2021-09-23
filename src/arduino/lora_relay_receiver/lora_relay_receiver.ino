@@ -30,8 +30,8 @@ void print_rate() {
 void onReceive(int packetSize) {
   if (packetSize) {
     LoRa.readBytes(buf, MSG_SIZE);
-//    Serial.write(buf, MSG_SIZE);
-    print_rate();
+    Serial.write(buf, MSG_SIZE);
+//    print_rate();
   }
 }
 
@@ -39,25 +39,28 @@ void setup() {
   Serial.begin(9600);
   while (!Serial);
 
-  Serial.println("LoRa Receiver");
+//  Serial.println("LoRa Receiver");
   LoRa.setPins(RFM95_CS, RFM95_RST, RFM95_INT);
 
   if (!LoRa.begin(915E6)) {
-    Serial.println("Starting LoRa failed!");
+//    Serial.println("Starting LoRa failed!");
     while (1);
   }
   LoRa.setSpreadingFactor(6);
   LoRa.setSignalBandwidth(500E3);
 
   time_start = micros();
-  Serial.print("Pose message is of size: ");
-  Serial.println(sizeof(rexlab::Pose<int16_t>));
+//  Serial.print("Pose message is of size: ");
+//  Serial.println(sizeof(rexlab::Pose<int16_t>));
   
   LoRa.onReceive(onReceive);
   LoRa.receive(7);
 }
 
 void loop() {
+  while (Serial.available() > 0) {
+    char t = Serial.read();
+  }
 //  digitalWrite(LED_PIN, HIGH);
 //  Serial.write("hi there");
 //  delay(100);

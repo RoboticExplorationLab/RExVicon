@@ -2,6 +2,7 @@
 
 #include <chrono>
 #include <string>
+#include <thread>
 
 #include <fmt/core.h>
 #include <fmt/chrono.h>
@@ -59,16 +60,26 @@ void MeasureLatency(const std::string& portname_tx, const std::string& portname_
   fmt::print("Sending 1 packet to receiver...\n");
   sp_blocking_write(port_rx, buf_rx, kMsgLength, timeout_ms.count());
   sp_drain(port_rx);
+  int num_bytes = sp_input_waiting(port_rx);
+  fmt::print("Number of bytes waiting: {}\n", num_bytes);
 
+  // Write data
+  auto t_start = std::chrono::high_resolution_clock::now();
   for (int i = 0; i < 100; ++i) {
-    fmt::print("Iter {}, Sending data...\n", i);
+    // fmt::print("Iter {}, Sending data...\n", i);
+    auto t_latency_start = std::chrono::high_resolution_clock::now();
     sp_blocking_write(port_tx, buf_tx, kMsgLength, timeout_ms.count());
     sp_drain(port_tx);
+    sp_blocking_read(port_rx, buf_rx, kMsgLength, timeout_ms.count());
+    std::chrono::duration<double, std::micro> latency = std::chrono::high_resolution_clock::now() - t_latency_start;
+    fmt::print("Iter {} latency {}\n", i, latency);
   }
+  std::chrono::duration<double, std::ratio<1>> t_elapsed = std::chrono::high_resolution_clock::now() - t_start;
+  fmt::print("Average loop rate: {} Hz\n", 100 / t_elapsed.count());
   fmt::print("Reading data\n");
-  int num_bytes = sp_input_waiting(port_rx);
-  char inputbuf[2000];
+  num_bytes = sp_input_waiting(port_rx);
   fmt::print("Number of bytes waiting: {}\n", num_bytes);
+  char inputbuf[2500];
   fmt::print("Got x value of {}\n", pose_rx.position_x);
   sp_blocking_read(port_rx, inputbuf, num_bytes, timeout_ms.count());
   fmt::print("Got message: {}\n", inputbuf);
