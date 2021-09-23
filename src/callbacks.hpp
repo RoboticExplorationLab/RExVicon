@@ -31,8 +31,8 @@ class SerialCallback {
 
   template <class T>
   void operator()(const Pose<T>& pose) {
-    ConvertPoseFloatToInt(pose, &msg_);
-    WriteBytes(msg_.GetData(), msg_.NumBytes());
+    // ConvertPoseFloatToInt(pose, &msg_);
+    WriteBytes(pose.GetData(), pose.NumBytes());
   }
 
  private:
