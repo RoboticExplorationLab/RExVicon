@@ -64,6 +64,7 @@ bool SerialCallback::WriteBytes(const char* data, size_t size) {
   // fmt::print("Writing to serial...\n");
   if (IsOpen()) {
     sp_blocking_write(port_, data, size, timeout_.count());
+    sp_drain(port_);
     return true;
   } else {
     fmt::print("WARNING: Trying to write to a closed port!\n");
