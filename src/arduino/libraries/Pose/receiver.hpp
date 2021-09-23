@@ -71,9 +71,10 @@ int VerifyRead(char* buf, int len, uint8_t msg_id);
  * 
  * TODO: Handle the case when the message ID is not found at all in the data being read.
  */
+template <class SerialPort>
 class SerialReceiver {
  public:
-  explicit SerialReceiver(HardwareSerial& serial_port, uint8_t msg_id) 
+  explicit SerialReceiver(SerialPort& serial_port, uint8_t msg_id) 
       : serial_port_(serial_port), msg_id_(msg_id) {}
   void Init() {
     if (enable_rate_print_) {
@@ -87,31 +88,34 @@ class SerialReceiver {
   }
 
   bool Receive(char* buf, int len) {
-    int bytes_received = serial_port_.readBytes(buf, len);
-    if (bytes_received) {
-      int extra_bytes = VerifyRead(buf, len, msg_id_);
-      serial_port_.readBytes(buf + len - extra_bytes - 1, extra_bytes);
-      ++receive_count_;
-    } else {
-      Serial.print("Serial read timed out\n");
-    }
-    if (enable_rate_print_) {
-      uint32_t time_elapsed_us = micros() - time_start_us_;
-      if (time_elapsed_us > rate_print_period_us_) {
-        float time_s = time_elapsed_us / 1e6;
-        float average_rate = receive_count_ / time_s;
-        Serial.print("Average rate: ");
-        Serial.print(average_rate);
-        Serial.print(" Hz\n");
-        receive_count_ = 0;
-        time_start_us_ = micros();
+    if (serial_port_.available() >= len) {
+      int bytes_received = serial_port_.readBytes(buf, len);
+      if (bytes_received) {
+        int extra_bytes = VerifyRead(buf, len, msg_id_);
+        serial_port_.readBytes(buf + len - extra_bytes - 1, extra_bytes);
+        ++receive_count_;
+      } else {
+        Serial.print("Serial read timed out\n");
       }
+      if (enable_rate_print_) {
+        uint32_t time_elapsed_us = micros() - time_start_us_;
+        if (time_elapsed_us > rate_print_period_us_) {
+          float time_s = time_elapsed_us / 1e6;
+          float average_rate = receive_count_ / time_s;
+          Serial.print("Average rate: ");
+          Serial.print(average_rate);
+          Serial.print(" Hz\n");
+          receive_count_ = 0;
+          time_start_us_ = micros();
+        }
+      }
+      return static_cast<bool>(bytes_received);
     }
-    return static_cast<bool>(bytes_received);
+    return false; 
   }
 
  private:
-  HardwareSerial& serial_port_;
+  SerialPort& serial_port_;
   uint8_t msg_id_;
   int receive_count_;
   bool enable_rate_print_ = false;

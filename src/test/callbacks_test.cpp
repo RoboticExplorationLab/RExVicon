@@ -5,7 +5,7 @@
 #include <fmt/core.h>
 #include <gtest/gtest.h>
 
-#include "src/arduino/teensy_receiver/pose.hpp"
+#include "src/arduino/libraries/Pose/Pose.hpp"
 #include "src/callbacks.hpp"
 
 namespace rexlab {

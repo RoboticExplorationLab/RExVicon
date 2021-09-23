@@ -7,7 +7,7 @@
 #include <fmt/chrono.h>
 #include <fmt/ostream.h>
 
-#include "src/arduino/teensy_receiver/pose.hpp"
+#include "src/arduino/libraries/Pose/Pose.hpp"
 // #include "src/vicon_driver.hpp"
 // #include "src/callbacks.hpp"
 #include "src/utils.hpp"
@@ -134,12 +134,12 @@ int main (int argc, char* argv[]) {
 
   }
   std::vector<std::string> port_list = rexlab::GetPortList();
-  if (port_list[0] == "/dev/ttyACM0") {
-    port_index += 1;
-  }
+  // if (port_list[0] == "/dev/ttyACM0") {
+  //   port_index += 1;
+  // }
   for (const auto& name : port_list) {
     fmt::print("Got Port {}\n", name);
   }
-  int baud_rate = 57600;
+  int baud_rate = 115200;
   rexlab::ReadWriteSerial(port_list[port_index], baud_rate, write);
 }

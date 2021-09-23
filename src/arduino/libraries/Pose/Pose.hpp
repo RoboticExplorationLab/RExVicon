@@ -11,7 +11,7 @@ namespace rexlab {
 namespace {
 
 template <class T>
-constexpr T GetUnitQuaternionScalar() {
+T GetUnitQuaternionScalar() {
   if (std::is_integral<T>::value) {
     return std::numeric_limits<T>::max();
   } else if (std::is_floating_point<T>::value) {

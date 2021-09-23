@@ -39,3 +39,13 @@ target_link_libraries(simple_serial_test
   ViconSDK::ViconSDK
   libserialport
 )
+
+add_executable(lora_latency_test
+  lora_latency_test.cpp
+)
+target_link_libraries(lora_latency_test
+  PRIVATE
+  fmt::fmt
+  libserialport
+  RExVicon::vicon_driver
+)
