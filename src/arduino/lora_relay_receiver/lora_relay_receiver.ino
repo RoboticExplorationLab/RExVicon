@@ -54,7 +54,7 @@ void setup() {
 //  Serial.println(sizeof(rexlab::Pose<int16_t>));
   
   LoRa.onReceive(onReceive);
-  LoRa.receive(7);
+  LoRa.receive(MSG_SIZE);
 }
 
 void loop() {

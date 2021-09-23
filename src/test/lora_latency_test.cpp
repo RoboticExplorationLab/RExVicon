@@ -3,6 +3,7 @@
 #include <chrono>
 #include <string>
 #include <thread>
+#include <vector>
 
 #include <fmt/core.h>
 #include <fmt/chrono.h>
@@ -65,24 +66,39 @@ void MeasureLatency(const std::string& portname_tx, const std::string& portname_
 
   // Write data
   auto t_start = std::chrono::high_resolution_clock::now();
-  for (int i = 0; i < 100; ++i) {
+  std::vector<std::chrono::duration<double, std::milli>> latencies;
+  int Nruns = 200;
+  for (int i = 0; i < Nruns; ++i) {
     // fmt::print("Iter {}, Sending data...\n", i);
+    pose_tx.position_x = i;
     auto t_latency_start = std::chrono::high_resolution_clock::now();
     sp_blocking_write(port_tx, buf_tx, kMsgLength, timeout_ms.count());
     sp_drain(port_tx);
     sp_blocking_read(port_rx, buf_rx, kMsgLength, timeout_ms.count());
-    std::chrono::duration<double, std::micro> latency = std::chrono::high_resolution_clock::now() - t_latency_start;
-    fmt::print("Iter {} latency {}\n", i, latency);
+    latencies.emplace_back(std::chrono::high_resolution_clock::now() - t_latency_start);
+    fmt::print("Sent {}, Got {}\n", i, pose_rx.position_x);
+    // fmt::print("Iter {} latency {}\n", i, latency);
   }
+  std::chrono::duration<double, std::milli> average_latency(0);
+  std::chrono::duration<double, std::milli> max_latency(0);
+  std::chrono::duration<double, std::milli> std_latency(0);
+  for (auto& time : latencies) {
+    average_latency += time;
+    max_latency = std::max(max_latency, time);
+  }
+  average_latency /= Nruns;
+  double var_latency = 0;
+  for (auto& time : latencies) {
+    double std = (time - average_latency).count();
+    var_latency += std * std;
+  }
+  std_latency = std::chrono::duration<double, std::milli>(std::sqrt(var_latency));
+  fmt::print("Average latency: {}\n", average_latency);
+  fmt::print("Max latency: {}\n", max_latency);
+  fmt::print("Std latency: {}\n", std_latency);
+
   std::chrono::duration<double, std::ratio<1>> t_elapsed = std::chrono::high_resolution_clock::now() - t_start;
-  fmt::print("Average loop rate: {} Hz\n", 100 / t_elapsed.count());
-  fmt::print("Reading data\n");
-  num_bytes = sp_input_waiting(port_rx);
-  fmt::print("Number of bytes waiting: {}\n", num_bytes);
-  char inputbuf[2500];
-  fmt::print("Got x value of {}\n", pose_rx.position_x);
-  sp_blocking_read(port_rx, inputbuf, num_bytes, timeout_ms.count());
-  fmt::print("Got message: {}\n", inputbuf);
+  fmt::print("Average loop rate: {} Hz\n", Nruns / t_elapsed.count());
   fmt::print("Closing ports...");
   sp_close(port_tx);
   sp_close(port_rx);
