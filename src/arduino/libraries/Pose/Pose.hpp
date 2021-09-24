@@ -104,6 +104,7 @@ Pose<Tfloat> ConvertPoseIntToFloat(const Pose<Tint>& pint) {
     static_cast<Tfloat>(pint.quaternion_z / static_cast<Tfloat>(Tmax) * kQuatScaling),
     pint.position_scale, pint.is_occluded
   );
+  pfloat.time_us = pint.time_us;
   return pfloat;
 }
 
@@ -122,6 +123,7 @@ void ConvertPoseIntToFloat(const Pose<Tint>& pint, Pose<Tfloat>* pfloat) {
   pfloat->quaternion_z = static_cast<Tfloat>(pint.quaternion_z / static_cast<Tfloat>(Tmax) * kQuatScaling);
   pfloat->position_scale = pint.position_scale;
   pfloat->is_occluded = pint.is_occluded;
+  pfloat->time_us = pint.time_us;
 }
 
 template <class Tint, class Tfloat>
@@ -155,6 +157,7 @@ Pose<Tint> ConvertPoseFloatToInt(const Pose<Tfloat>& pfloat) {
     ClampToInt<Tint>(pfloat.quaternion_z * Tmax / kQuatScaling), 
     pfloat.position_scale, pfloat.is_occluded
   );
+  pint.time_us = pfloat.time_us;
   return pint;
 }
 
@@ -173,6 +176,7 @@ void ConvertPoseFloatToInt(const Pose<Tfloat>& pfloat, Pose<Tint>* pint) {
   pint->quaternion_z = ClampToInt<Tint>(pfloat.quaternion_z * Tmax / kQuatScaling); 
   pint->position_scale = pfloat.position_scale; 
   pint->is_occluded = pfloat.is_occluded;
+  pint->time_us = pfloat.time_us;
 }
 
 template <class T>
