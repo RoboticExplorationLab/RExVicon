@@ -51,6 +51,10 @@ arguments:
 - `-t` / `--subject`: Name of the Vicon object to publish (default `rex1`).
 - `-w` / `--wait`: Wait indefinitely to connect to the vicon, recommended if running on startup (default `false`).
 
+## Transmitting over Radio
+To transmit the Vicon data over radio, use the `lora_rely.ino` script in the `src/arduino/`
+directory of this repo. This script is designed for a Feather M0 LoRa.
+
 ## Running the script on startup
 If running the script on a Linux machine (tested on a Jetson Nano), and you want the
 Vicon publisher to start automatically, follow these instructions:
