@@ -14,7 +14,7 @@ LIST(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
 # Options 
 ####################
 set(OPTION_PREFIX "REXVICON")
-option(${OPTION_PREFIX}_BUILD_TESTS "Build test suite for package ${CMAKE_PROJECT_NAME}" ON)
+option(${OPTION_PREFIX}_BUILD_TESTS "Build test suite for package ${CMAKE_PROJECT_NAME}" OFF)
 
 enable_testing()
 include(GoogleTest)
