@@ -63,8 +63,24 @@ void SerialCallback::SetTimeout(int time_ms) {
 bool SerialCallback::WriteBytes(const char* data, size_t size) {
   // fmt::print("Writing to serial...\n");
   if (IsOpen()) {
+    // Check for input from the serial port and print to stdout
+    if (sp_input_waiting(port_) > 0) {
+      int input_bytes = sp_input_waiting(port_);
+      fmt::print("Got message of length {} from Feather: ", input_bytes);
+      char* tempbuf = (char*) malloc(input_bytes);
+      sp_blocking_read(port_, tempbuf, std::min(1000, input_bytes), 100);
+
+      // Convert char array to valid string
+      std::string message = "";
+      for (int i = 0; i < input_bytes; ++i) {
+        message += tempbuf[i];
+      }
+      fmt::print("{}", message);
+    }
+
+    // Write the pose data to the serial port
     sp_blocking_write(port_, data, size, timeout_.count());
-    sp_drain(port_);
+    sp_drain(port_);  // make sure the transmission is complete before continuing
     return true;
   } else {
     fmt::print("WARNING: Trying to write to a closed port!\n");

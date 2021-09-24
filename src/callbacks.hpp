@@ -32,7 +32,7 @@ class SerialCallback {
   template <class T>
   void operator()(const Pose<T>& pose) {
     ConvertPoseFloatToInt(pose, &msg_);
-    WriteBytes(msg_.GetData(), msg_.NumBytes());
+    WriteBytes(msg_.GetData(), sizeof(msg_));
   }
 
  private:
@@ -40,7 +40,7 @@ class SerialCallback {
   int baud_rate_;
   struct sp_port* port_;
   bool is_open_ = false;
-  std::chrono::milliseconds timeout_;
+  std::chrono::milliseconds timeout_ = std::chrono::milliseconds(100);
   Pose<int16_t> msg_;
 };
 
