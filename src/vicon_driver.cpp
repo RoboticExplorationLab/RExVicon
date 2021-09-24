@@ -174,7 +174,7 @@ bool ViconDriver::Warmup() {
         std::chrono::duration_cast<
             std::chrono::duration<double, std::ratio<1>>>(time_now_sys)
             .count();
-    timecode_offset_ = time_now - network_lag_estimate_ - timecode_time;
+    timecode_offset_ = -network_lag_estimate_ - timecode_time;
     printf("Timecode offset :: %.8f Time:: %.8f Timecode %.8f lag :: %f\n",
            timecode_offset_, time_now, timecode_time, network_lag_estimate_);
   }
