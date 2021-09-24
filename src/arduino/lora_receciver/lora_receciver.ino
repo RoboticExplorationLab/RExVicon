@@ -1,17 +1,24 @@
 #include <SPI.h>
 #include <LoRa.h>
 
+#include "Pose.hpp"
+#include "Pose_utils.hpp"
+
 #define RFM95_CS 8
 #define RFM95_RST 4
 #define RFM95_INT 3
 #define RF95_FREQ 915.0
 #define LED_PIN 13
-#define MSG_SIZE 20
 
 int counter = 0;
 int time_start = 0;
 int count = 0;
-uint8_t buf[MSG_SIZE];
+
+constexpr int MSG_SIZE = sizeof(rexlab::Pose<int16_t>);
+rexlab::Pose<int16_t> msg;
+rexlab::Pose<float> pose;
+uint8_t* buf = reinterpret_cast<uint8_t*>(&msg);
+
 
 void print_rate() {
   count++;
@@ -24,24 +31,11 @@ void print_rate() {
   }
 }
 
-
 void onReceive(int packetSize) {
   if (packetSize) {
-    // received a packet
-//    Serial.print("Received packet '");
-
-    // read packet
-//    while (LoRa.available()) {
-//      Serial.print((char)LoRa.read());
-//    }
     LoRa.readBytes(buf, MSG_SIZE);
-//    for (int i = 0; i < 7; ++i) {
-//      Serial.print(buf[i]);
-//    }
-
-    // print RSSI of packet
-//    Serial.print("' with RSSI ");
-//    Serial.println(LoRa.packetRssi());
+    rexlab::ConvertPoseIntToFloat(msg, &pose);
+    PrintPose(pose);
     print_rate();
   }
 }
@@ -63,26 +57,8 @@ void setup() {
   time_start = micros();
   
   LoRa.onReceive(onReceive);
-  LoRa.receive(7);
+  LoRa.receive(MSG_SIZE);
 
-}
-
-void example_original() {
-  // try to parse packet
-  int packetSize = LoRa.parsePacket();
-  if (packetSize) {
-    // received a packet
-    Serial.print("Received packet '");
-
-    // read packet
-    while (LoRa.available()) {
-      Serial.print((char)LoRa.read());
-    }
-
-    // print RSSI of packet
-    Serial.print("' with RSSI ");
-    Serial.println(LoRa.packetRssi());
-  }
 }
 
 void loop() {
