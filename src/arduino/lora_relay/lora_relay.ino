@@ -3,24 +3,24 @@
  * @author Brian Jackson (bjack205@gmail.com)
  * @brief This script takes input from a computer (e.g. Jetson Nano) and publishes the data
  *        over LoRa radio.
- * 
+ *
  * Board: LoRa Feather M0 by Adafruit
- * 
+ *
  * The data is assumed to be rexlab::Pose<int16_t> message, a 24 byte message containing
  * position and orientation information. The microcontroller will send periodic messages
  * back over serial verifying the LoRa is actually sending data.
- * 
- * The LED light on the Feather is on whenever data is being transmited. If it stops 
+ *
+ * The LED light on the Feather is on whenever data is being transmited. If it stops
  * receiving data, it will wait for 5 seconds for more data before turning off the light.
- * 
- * This script uses the message ID to improve robustness when receiving serial data from 
+ *
+ * This script uses the message ID to improve robustness when receiving serial data from
  * the computer. The message is assumed to always be the same length.
- * 
+ *
  * @version 0.1
  * @date 2021-09-24
- * 
+ *
  * @copyright Copyright (c) 2021
- * 
+ *
  */
 
 #include <SPI.h>
@@ -40,7 +40,7 @@ using Pose = rexlab::Pose<int16_t>;
 
 /**
  * @brief Prints a message at a given rate
- * 
+ *
  * # Usage
  * Initialize the printer as a global variable (one for each rate-limited message you want to send).
  * Call the `print` or `println` methods as you would. Note that right now you can't string multiple
@@ -48,9 +48,9 @@ using Pose = rexlab::Pose<int16_t>;
  */
 class PrintAtRate {
   public:
-    PrintAtRate(float rate) 
-        : delay_ms_(static_cast<int>(1000.0 / rate)), 
-          timestamp_last_print_ms_(-delay_ms_) {}  
+    PrintAtRate(float rate)
+        : delay_ms_(static_cast<int>(1000.0 / rate)),
+          timestamp_last_print_ms_(-delay_ms_) {}
     void print(const std::string& msg) {
       int time_since_last_print_ms = millis() - timestamp_last_print_ms_;
       if (time_since_last_print_ms > delay_ms_) {
@@ -65,10 +65,10 @@ class PrintAtRate {
         timestamp_last_print_ms_ = millis();
       }
     }
-    
+
   private:
     int delay_ms_;
-    int timestamp_last_print_ms_;  
+    int timestamp_last_print_ms_;
 };
 
 
@@ -112,9 +112,10 @@ void setup() {
   if (!LoRa.begin(915E6)) {
     Serial.println("Starting LoRa failed!");
     while (1);
-  } 
+  }
   LoRa.setSpreadingFactor(6);
   LoRa.setSignalBandwidth(500E3);
+  LoRa.enableCrc();
 
   time_start = micros();
   digitalWrite(LED_PIN, LOW);
