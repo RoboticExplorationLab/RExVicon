@@ -10,6 +10,8 @@ FetchContent_Declare(cppzmq
 if(NOT libzmq_POPULATED)
   FetchContent_Populate(libzmq)
   set(ZMQ_BUILD_TESTS OFF CACHE BOOL "Test suite for libzmq")
+  # To enable building on macOS, see github issue https://github.com/zeromq/libzmq/issues/4085
+  set(WITH_TLS OFF CACHE INTERNAL "Disable TLS support")
   add_subdirectory(${libzmq_SOURCE_DIR} ${libzmq_BINARY_DIR})
 endif()
 
@@ -19,3 +21,6 @@ if(NOT cppzmq_POPULATED)
   set(CPPZMQ_BUILD_TESTS OFF CACHE BOOL "Test suite for cppzmq")
   add_subdirectory(${cppzmq_SOURCE_DIR} ${cppzmq_BINARY_DIR})
 endif()
+
+# cmake_print_variables(cppzmq_POPULATED)
+# cmake_print_variables(cppzmq_BINARY_DIR)

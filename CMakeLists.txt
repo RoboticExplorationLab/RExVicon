@@ -8,10 +8,10 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 list(APPEND CMAKE_MESSAGE_CONTEXT RExVicon)
 include(CMakePrintHelpers)
-LIST(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
 
 ####################
-# Options 
+# Options
 ####################
 set(OPTION_PREFIX "REXVICON")
 option(${OPTION_PREFIX}_BUILD_TESTS "Build test suite for package ${CMAKE_PROJECT_NAME}" OFF)
@@ -21,7 +21,7 @@ include(GoogleTest)
 include(CTest)
 
 ####################
-# Dependencies 
+# Dependencies
 ####################
 add_subdirectory(deps)
 

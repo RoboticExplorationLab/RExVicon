@@ -10,7 +10,7 @@
 #include <libserialport.h>
 #include <zmq.hpp>
 
-#include "src/arduino/libraries/Pose/Pose.hpp" 
+#include "src/arduino/libraries/Pose/Pose.hpp"
 #include "src/utils.hpp"
 
 namespace rexlab {
@@ -101,7 +101,7 @@ class SerialZMQCallback {
  public:
 
   template <class... Args>
-  SerialZMQCallback(const std::string& port_name, int baudrate, Args... args) 
+  SerialZMQCallback(const std::string& port_name, int baudrate, Args... args)
       : zmq_(std::forward<Args>(args)...), ser_(port_name, baudrate) {
     ser_.Open();
   }

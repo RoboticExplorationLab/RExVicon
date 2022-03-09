@@ -9,13 +9,25 @@
 
 namespace rexlab {
 
-const std::string kViconServerAddress = "192.168.3.249";
+void usage()
+{
+    std::cout << "- v / --vicon_ip : IP address of Vicon server\n"
+                 "-sp / --serial-port : The name of the serial port to print to(default / dev / ttyACM0)\n"
+                 "- b / --baud_rate : Baud rate of the serial port(default 57600)\n"
+                 "- a / --ipaddres : IP address on which to publish the ZMQ data(default 192.168.3.134)\n"
+                 "- p / --port : Port on which which to publish the ZMQ data(default 5555)\n"
+                 "- t / --subject : Name of the Vicon object to publish(default rex1)\n"
+                 "- w / --wait : Wait indefinitely to connect to the vicon, recommended if running on startup(default false).";
+}
 
-bool IsConnectedToVicon(const std::string& subject_name, bool wait_to_connect = false) {
+bool IsConnectedToVicon(const std::string &vicon_ip_addr,
+                        const std::string &subject_name,
+                        bool wait_to_connect = false)
+{
   ViconDriver driver;
   ViconDriverOptions opts;
   opts.wait_to_connect = wait_to_connect;
-  opts.server_id = kViconServerAddress;
+  opts.server_id = vicon_ip_addr;
   driver.Initialize(opts);
 
   if (driver.IsConnected()) {
@@ -37,12 +49,14 @@ bool IsConnectedToVicon(const std::string& subject_name, bool wait_to_connect = 
   return true;
 }
 
-void Run(const std::string& port_name, int baud_rate,
-         const std::string& ip_addr, int port,
-         const std::string& subject_name) {
+void Run(const std::string &vicon_ip_addr,
+         const std::string &port_name, int baud_rate,
+         const std::string &ip_addr, int port,
+         const std::string &subject_name)
+{
   ViconDriver driver;
   ViconDriverOptions opts;
-  opts.server_id = "192.168.3.249";
+  opts.server_id = vicon_ip_addr;
   driver.Initialize(opts);
 
   SerialZMQCallback callback(port_name, baud_rate, ip_addr, port);
@@ -54,10 +68,11 @@ void Run(const std::string& port_name, int baud_rate,
 }  // namespace rexlab
 
 int main(int argc, char* argv[]) {
+  std::string vicon_ip_addr = "192.168.3.137";
   std::string port_name = "/dev/ttyACM0";
   int baud_rate = 57600;
-  std::string ip_addr = "192.168.3.134"; 
-  int port = 5555; 
+  std::string ip_addr = "192.168.3.134";
+  int port = 5555;
   std::string subject = "rex1";
   bool wait_to_connect = false;
 
@@ -66,6 +81,9 @@ int main(int argc, char* argv[]) {
     args.emplace_back(argv[i]);
   }
   for (auto it = args.begin(); it != args.end(); ++it) {
+    if (*it == "-v" || *it == "--vicon_port") {
+      ip_addr = stoi(*(++it));
+    }
     if (*it == "-p" || *it == "--port") {
       port = stoi(*(++it));
     }
@@ -82,12 +100,12 @@ int main(int argc, char* argv[]) {
       subject = *(++it);
     }
     if (*it == "-w" || *it == "--wait") {
-		  wait_to_connect = true;	
+		  wait_to_connect = true;
     }
   }
 
   std::cout << "This is the RExLab Vicon Driver\n";
-  rexlab::IsConnectedToVicon(subject, wait_to_connect);
-  rexlab::Run(port_name, baud_rate, ip_addr, port, subject);
+  rexlab::IsConnectedToVicon(vicon_ip_addr, subject, wait_to_connect);
+  rexlab::Run(vicon_ip_addr, port_name, baud_rate, ip_addr, port, subject);
   return 0;
 }

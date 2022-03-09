@@ -24,6 +24,10 @@ if (${${OPTION_PREFIX}_BUILD_TESTS})
 endif()
 
 
+include(BuildZMQ.cmake)
+include(Buildlibserialport.cmake)
+
+
 find_package(ViconSDK REQUIRED)
 add_library(ViconSDK3 INTERFACE)
 target_link_libraries(ViconSDK3
@@ -35,5 +39,3 @@ target_include_directories(ViconSDK3
   ${ViconSDK_INCLUDE_DIRS}
 )
 add_library(ViconSDK::ViconSDK ALIAS ViconSDK3)
-
-include(BuildZMQ.cmake)
