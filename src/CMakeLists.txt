@@ -8,7 +8,19 @@ include_directories(
   "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>"
 )
 
-find_package(libserialport)
+# Setup libserialport
+find_package(libserialport REQUIRED)
+# add_library(libserialport INTERFACE)
+# add_dependencies(libserialport serialport)
+# target_link_libraries(libserialport
+#   INTERFACE
+#   ${serialport_LIB}
+# )
+# target_include_directories(libserialport
+#   INTERFACE
+#   ${serialport_INCLUDE_DIRS}
+# )
+
 
 add_library(rexvicon_driver
   vicon_driver.hpp
@@ -34,18 +46,7 @@ target_link_libraries(rexvicon_driver
     libserialport
 )
 
-# add_library(RExVicon::vicon_driver ALIAS rexvicon_driver)
-# set_target_properties(rexvicon_driver PROPERTIES
-#   OUTPUT_NAME vicon_driver # sets the name of the installed library
-#   EXPORT_NAME vicon_driver # sets the name of the imported target
-# )
-
-# # Install the library
-# install(TARGETS rexvicon_driver
-#   EXPORT RExVicon_export # add to the export set
-# )
-
-# Main executable
+# Rexvicon executable
 add_executable(rexvicon
   rexvicon_main.cpp
 )
@@ -56,7 +57,7 @@ target_link_libraries(rexvicon
     libserialport
 )
 
-# Main executable
+# Simulated vicon executable
 add_executable(simulated_vicon
   simulated_vicon_main.cpp
 )

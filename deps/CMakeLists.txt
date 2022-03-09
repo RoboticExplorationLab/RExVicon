@@ -25,7 +25,7 @@ endif()
 
 
 include(BuildZMQ.cmake)
-include(Buildlibserialport.cmake)
+include(Buildserialport.cmake)
 
 
 find_package(ViconSDK REQUIRED)

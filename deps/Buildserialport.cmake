@@ -15,6 +15,9 @@ externalproject_add(libserialport-download
     UPDATE_COMMAND "" # don't rebuild every time
 )
 
+# externalproject_get_property(libserialport-download INSTALL_DIR)
+# cmake_print_variables(INSTALL_DIR)
+
 # add_library(libserialport SHARED IMPORTED GLOBAL)
 # add_dependencies(libserialport libserialport-download)
 # target_include_directories(libserialport
@@ -22,7 +25,7 @@ externalproject_add(libserialport-download
 #         ${SERIALPORT_DIR}
 # )
 
-# # Set location of downloaded serialport libary
+# # # Set location of downloaded serialport libary
 # externalproject_get_property(libserialport-download INSTALL_DIR)
 # if (APPLE)
 #     set_target_properties(libserialport PROPERTIES

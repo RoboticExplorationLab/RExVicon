@@ -1,7 +1,6 @@
 set(projPrefix ViconSDK)
 
-set(SERIALPORT_PREFIX ${PROJECT_BINARY_DIR}/_deps/libserialport)
-set(SERIALPORT_DIR ${SERIALPORT_PREFIX}/src/libserialport-download)
+set(SDK_DIR ${PROJECT_SOURCE_DIR}/ViconSDK)
 
 # Get the system-specific sub-directory for the SDK ie Mac of Linux
 set(SYS_SDK_DIR)
@@ -18,6 +17,8 @@ find_file(SDK_HEADER DataStreamClient.h
     # REQUIRED
 )
 find_file(SDK_HEADER DataStreamClient.h)
+
+cmake_print_variables(SYS_SDK_DIR)
 
 # Find the SDK Library
 find_library(SDK_LIB NAMES ViconDataStreamSDK_CPP
