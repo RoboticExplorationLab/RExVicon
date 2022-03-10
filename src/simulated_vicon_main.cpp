@@ -39,7 +39,8 @@ void Run(const std::string &port_name, int baud_rate,
 }
 }  // namespace rexlab
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[])
+{
     std::string port_name = "/dev/ttyACM0";
     int baud_rate = 57600;
     std::string ip_addr = "192.168.3.134";

@@ -1,5 +1,6 @@
 #include "src/vicon_driver.hpp"
 
+#include <zmq.hpp>
 #include <fmt/core.h>
 
 #include <chrono>
@@ -133,7 +134,7 @@ void ViconDriver::RunLoop() {
 bool ViconDriver::Warmup() {
   auto getframe_result = client_.GetFrame();
   if (getframe_result.Result != ViconSDK::Result::Success) {
-    std::cerr << "ViconSDK GetFrame did not return success: " << getframe_result.Result 
+    std::cerr << "ViconSDK GetFrame did not return success: " << getframe_result.Result
               << std::endl;
     return false;
   }

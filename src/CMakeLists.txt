@@ -8,19 +8,21 @@ include_directories(
   "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>"
 )
 
-# Setup libserialport
-find_package(libserialport REQUIRED)
-# add_library(libserialport INTERFACE)
-# add_dependencies(libserialport serialport)
-# target_link_libraries(libserialport
-#   INTERFACE
-#   ${serialport_LIB}
-# )
-# target_include_directories(libserialport
-#   INTERFACE
-#   ${serialport_INCLUDE_DIRS}
-# )
+find_package(ViconSDK REQUIRED)
+add_library(ViconSDK3 INTERFACE)
+target_link_libraries(ViconSDK3
+  INTERFACE
+  ${ViconSDK_LIB}
+)
+target_include_directories(ViconSDK3
+  INTERFACE
+  ${ViconSDK_INCLUDE_DIRS}
+)
+add_library(ViconSDK::ViconSDK ALIAS ViconSDK3)
 
+# cmake_print_variables(CMAKE_INSTALL_INCLUDEDIR)
+# cmake_print_variables(CMAKE_SOURCE_DIR)
+# cmake_print_variables(CMAKE_CURRENT_BINARY_DIR)
 
 add_library(rexvicon_driver
   vicon_driver.hpp
@@ -35,14 +37,14 @@ add_library(rexvicon_driver
   utils.cpp
 )
 
-
 target_link_libraries(rexvicon_driver
   PUBLIC
     cppzmq
+    # ViconSDK
     ViconSDK::ViconSDK
 
   PRIVATE
-    fmt::fmt
+    fmt
     libserialport
 )
 
@@ -53,7 +55,7 @@ add_executable(rexvicon
 target_link_libraries(rexvicon
   PRIVATE
     rexvicon_driver
-    fmt::fmt
+    fmt
     libserialport
 )
 
@@ -64,6 +66,6 @@ add_executable(simulated_vicon
 target_link_libraries(simulated_vicon
   PRIVATE
     rexvicon_driver
-    fmt::fmt
+    fmt
     libserialport
 )

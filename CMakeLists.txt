@@ -11,18 +11,12 @@ include(CMakePrintHelpers)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
 
 ####################
-# Options
+# Build
 ####################
-set(OPTION_PREFIX "REXVICON")
-option(${OPTION_PREFIX}_BUILD_TESTS "Build test suite for package ${CMAKE_PROJECT_NAME}" OFF)
-
-enable_testing()
-include(GoogleTest)
-include(CTest)
-
-####################
-# Dependencies
-####################
+# include(getZMQ)
+# include(getFMT)
+# include(getViconSDK)
+# include(getLibserialport)
 add_subdirectory(deps)
 
 ####################

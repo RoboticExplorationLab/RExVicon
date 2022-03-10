@@ -1,3 +1,5 @@
+include(FetchContent)
+
 FetchContent_Declare(libzmq
   GIT_REPOSITORY https://github.com/zeromq/libzmq
   GIT_TAG 4097855ddaaa65ed7b5e8cb86d143842a594eebd # version 4.3.4
@@ -21,6 +23,3 @@ if(NOT cppzmq_POPULATED)
   set(CPPZMQ_BUILD_TESTS OFF CACHE BOOL "Test suite for cppzmq")
   add_subdirectory(${cppzmq_SOURCE_DIR} ${cppzmq_BINARY_DIR})
 endif()
-
-# cmake_print_variables(cppzmq_POPULATED)
-# cmake_print_variables(cppzmq_BINARY_DIR)
