@@ -11,13 +11,14 @@ include(CMakePrintHelpers)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
 
 ####################
-# Build
+# Dependencies
 ####################
-# include(getZMQ)
-# include(getFMT)
-# include(getViconSDK)
-# include(getLibserialport)
 add_subdirectory(deps)
+
+####################
+# Dependencies
+####################
+add_subdirectory(ViconSDK)
 
 ####################
 # Build
