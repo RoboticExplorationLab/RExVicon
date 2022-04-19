@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="InternalRelease|x64">
+      <Configuration>InternalRelease</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{00000000-0000-0000-0000-0000D7AF35E6}</ProjectGuid>
+    <RootNamespace>ViconCGStream</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="..\..\..\..\build\msvc\MSVC_Base.props" />
+    <Import Project="..\..\..\..\build\msvc\MSVC_MaxWarningLevel.props" />
+    <Import Project="..\..\..\..\build\msvc\options\CppStandard14.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='InternalRelease|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>..\..\..\..\bin\$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <TargetName>ViconCGStream</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='InternalRelease|x64'">
+    <OutDir>..\..\..\..\bin\$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <TargetName>ViconCGStream</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>..\..\..\..\bin\$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <TargetName>ViconCGStream</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.;..\..;..;.;Debug;..\..\..\..\thirdparty\Boost\boost-1.68.0-windows-vc140-x64-1\include\boost-1_68;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>..\..\..\..\bin\Debug;%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <PreprocessorDefinitions>TCM_WIN32;PROJECT_SOURCE_PATH=".";BOOST_THREAD_DYN_LINK;BOOST_LIB_TOOLSET="vc140";BOOST_CHRONO_DYN_LINK;BOOST_SYSTEM_DYN_LINK;BOOST_PYTHON_DYN_LINK;BOOST_FILESYSTEM_DYN_LINK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalOptions>/experimental:external /wd4706 /wd5044 /external:W0 /external:env:INCLUDE /external:I ..\..\..\..\thirdparty\Boost\boost-1.68.0-windows-vc140-x64-1\include\boost-1_68 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>TCM_WIN32;PROJECT_SOURCE_PATH=".";BOOST_THREAD_DYN_LINK;BOOST_LIB_TOOLSET="vc140";BOOST_CHRONO_DYN_LINK;BOOST_SYSTEM_DYN_LINK;BOOST_PYTHON_DYN_LINK;BOOST_FILESYSTEM_DYN_LINK;</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.;Debug;.;..\..;..;.;Debug;..\..\..\..\thirdparty\Boost\boost-1.68.0-windows-vc140-x64-1\include\boost-1_68;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\..\..\lib\Debug;..\..\..\..\thirdparty\Boost\boost-1.68.0-windows-vc140-x64-1\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <Lib>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='InternalRelease|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.;..\..;..;.;InternalRelease;..\..\..\..\thirdparty\Boost\boost-1.68.0-windows-vc140-x64-1\include\boost-1_68;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>..\..\..\..\bin\InternalRelease;%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <PreprocessorDefinitions>VICON_INTERNAL_RELEASE;NDEBUG;TCM_WIN32;PROJECT_SOURCE_PATH=".";BOOST_THREAD_DYN_LINK;BOOST_LIB_TOOLSET="vc140";BOOST_CHRONO_DYN_LINK;BOOST_SYSTEM_DYN_LINK;BOOST_PYTHON_DYN_LINK;BOOST_FILESYSTEM_DYN_LINK;BOOST_DISABLE_ASSERTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalOptions>/experimental:external /wd4706 /wd5044 /external:W0 /external:env:INCLUDE /external:I ..\..\..\..\thirdparty\Boost\boost-1.68.0-windows-vc140-x64-1\include\boost-1_68 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>VICON_INTERNAL_RELEASE;NDEBUG;TCM_WIN32;PROJECT_SOURCE_PATH=".";BOOST_THREAD_DYN_LINK;BOOST_LIB_TOOLSET="vc140";BOOST_CHRONO_DYN_LINK;BOOST_SYSTEM_DYN_LINK;BOOST_PYTHON_DYN_LINK;BOOST_FILESYSTEM_DYN_LINK;BOOST_DISABLE_ASSERTS;</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.;InternalRelease;.;..\..;..;.;InternalRelease;..\..\..\..\thirdparty\Boost\boost-1.68.0-windows-vc140-x64-1\include\boost-1_68;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\..\..\lib\InternalRelease;..\..\..\..\thirdparty\Boost\boost-1.68.0-windows-vc140-x64-1\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <Lib>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.;..\..;..;.;Release;..\..\..\..\thirdparty\Boost\boost-1.68.0-windows-vc140-x64-1\include\boost-1_68;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>..\..\..\..\bin\Release;%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <PreprocessorDefinitions>NDEBUG;TCM_OFF_SITE;TCM_WIN32;PROJECT_SOURCE_PATH=".";BOOST_THREAD_DYN_LINK;BOOST_LIB_TOOLSET="vc140";BOOST_CHRONO_DYN_LINK;BOOST_SYSTEM_DYN_LINK;BOOST_PYTHON_DYN_LINK;BOOST_FILESYSTEM_DYN_LINK;BOOST_DISABLE_ASSERTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalOptions>/experimental:external /wd4706 /wd5044 /external:W0 /external:env:INCLUDE /external:I ..\..\..\..\thirdparty\Boost\boost-1.68.0-windows-vc140-x64-1\include\boost-1_68 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;TCM_OFF_SITE;TCM_WIN32;PROJECT_SOURCE_PATH=".";BOOST_THREAD_DYN_LINK;BOOST_LIB_TOOLSET="vc140";BOOST_CHRONO_DYN_LINK;BOOST_SYSTEM_DYN_LINK;BOOST_PYTHON_DYN_LINK;BOOST_FILESYSTEM_DYN_LINK;BOOST_DISABLE_ASSERTS;</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.;Release;.;..\..;..;.;Release;..\..\..\..\thirdparty\Boost\boost-1.68.0-windows-vc140-x64-1\include\boost-1_68;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\..\..\lib\Release;..\..\..\..\thirdparty\Boost\boost-1.68.0-windows-vc140-x64-1\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <Lib>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Dummy.cpp">
+    </ClCompile>
+    <ClInclude Include="ApexHaptics.h">
+    </ClInclude>
+    <ClInclude Include="ApplicationInfo.h">
+    </ClInclude>
+    <ClInclude Include="CameraCalibrationHealth.h">
+    </ClInclude>
+    <ClInclude Include="CameraCalibrationHealthDetail.h">
+    </ClInclude>
+    <ClInclude Include="CameraCalibrationInfo.h">
+    </ClInclude>
+    <ClInclude Include="CameraInfo.h">
+    </ClInclude>
+    <ClInclude Include="CameraSensorInfo.h">
+    </ClInclude>
+    <ClInclude Include="CameraTimingInfo.h">
+    </ClInclude>
+    <ClInclude Include="CameraWand2d.h">
+    </ClInclude>
+    <ClInclude Include="CameraWand2dDetail.h">
+    </ClInclude>
+    <ClInclude Include="CameraWand3d.h">
+    </ClInclude>
+    <ClInclude Include="CameraWand3dDetail.h">
+    </ClInclude>
+    <ClInclude Include="CentreOfPressureFrame.h">
+    </ClInclude>
+    <ClInclude Include="Centroids.h">
+    </ClInclude>
+    <ClInclude Include="CentroidsDetail.h">
+    </ClInclude>
+    <ClInclude Include="CentroidTracks.h">
+    </ClInclude>
+    <ClInclude Include="CentroidTracksDetail.h">
+    </ClInclude>
+    <ClInclude Include="CentroidWeights.h">
+    </ClInclude>
+    <ClInclude Include="ChannelInfo.h">
+    </ClInclude>
+    <ClInclude Include="Contents.h">
+    </ClInclude>
+    <ClInclude Include="DeviceInfo.h">
+    </ClInclude>
+    <ClInclude Include="EdgePairs.h">
+    </ClInclude>
+    <ClInclude Include="EdgePairsDetail.h">
+    </ClInclude>
+    <ClInclude Include="Enum.h">
+    </ClInclude>
+    <ClInclude Include="EyeTrackerFrame.h">
+    </ClInclude>
+    <ClInclude Include="EyeTrackerInfo.h">
+    </ClInclude>
+    <ClInclude Include="Filter.h">
+    </ClInclude>
+    <ClInclude Include="ForceFrame.h">
+    </ClInclude>
+    <ClInclude Include="ForcePlateInfo.h">
+    </ClInclude>
+    <ClInclude Include="FrameInfo.h">
+    </ClInclude>
+    <ClInclude Include="FrameRateInfo.h">
+    </ClInclude>
+    <ClInclude Include="GlobalSegments.h">
+    </ClInclude>
+    <ClInclude Include="GlobalSegmentsDetail.h">
+    </ClInclude>
+    <ClInclude Include="GreyscaleBlobs.h">
+    </ClInclude>
+    <ClInclude Include="GreyscaleBlobsDetail.h">
+    </ClInclude>
+    <ClInclude Include="GreyscaleSubsampledBlobs.h">
+    </ClInclude>
+    <ClInclude Include="HardwareFrameInfo.h">
+    </ClInclude>
+    <ClInclude Include="IsEqual.h">
+    </ClInclude>
+    <ClInclude Include="Item.h">
+    </ClInclude>
+    <ClInclude Include="KeepAlive.h">
+    </ClInclude>
+    <ClInclude Include="LabeledReconRayAssignments.h">
+    </ClInclude>
+    <ClInclude Include="LabeledRecons.h">
+    </ClInclude>
+    <ClInclude Include="LabeledReconsDetail.h">
+    </ClInclude>
+    <ClInclude Include="LatencyInfo.h">
+    </ClInclude>
+    <ClInclude Include="LatencyInfoDetail.h">
+    </ClInclude>
+    <ClInclude Include="LightweightSegments.h">
+    </ClInclude>
+    <ClInclude Include="LightweightSegmentsDetail.h">
+    </ClInclude>
+    <ClInclude Include="LocalSegments.h">
+    </ClInclude>
+    <ClInclude Include="LocalSegmentsDetail.h">
+    </ClInclude>
+    <ClInclude Include="MomentFrame.h">
+    </ClInclude>
+    <ClInclude Include="ObjectEnums.h">
+    </ClInclude>
+    <ClInclude Include="ObjectQuality.h">
+    </ClInclude>
+    <ClInclude Include="Ping.h">
+    </ClInclude>
+    <ClInclude Include="ReconRayAssignmentsDetail.h">
+    </ClInclude>
+    <ClInclude Include="RequestFrame.h">
+    </ClInclude>
+    <ClInclude Include="RequestNextFrame.h">
+    </ClInclude>
+    <ClInclude Include="ScopedReader.h">
+    </ClInclude>
+    <ClInclude Include="ScopedWriter.h">
+    </ClInclude>
+    <ClInclude Include="StartMulticastSender.h">
+    </ClInclude>
+    <ClInclude Include="StopMulticastSender.h">
+    </ClInclude>
+    <ClInclude Include="StreamInfo.h">
+    </ClInclude>
+    <ClInclude Include="SubjectHealth.h">
+    </ClInclude>
+    <ClInclude Include="SubjectInfo.h">
+    </ClInclude>
+    <ClInclude Include="SubjectInfoDetail.h">
+    </ClInclude>
+    <ClInclude Include="SubjectScale.h">
+    </ClInclude>
+    <ClInclude Include="SubjectScaleDetail.h">
+    </ClInclude>
+    <ClInclude Include="SubjectTopology.h">
+    </ClInclude>
+    <ClInclude Include="SubjectTopologyDetail.h">
+    </ClInclude>
+    <ClInclude Include="Timecode.h">
+    </ClInclude>
+    <ClInclude Include="UnlabeledReconRayAssignments.h">
+    </ClInclude>
+    <ClInclude Include="UnlabeledRecons.h">
+    </ClInclude>
+    <ClInclude Include="UnlabeledReconsDetail.h">
+    </ClInclude>
+    <ClInclude Include="VideoFrame.h">
+    </ClInclude>
+    <ClInclude Include="VoltageFrame.h">
+    </ClInclude>
+    <None Include="ViconCGStream.project.xml">
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\..\..\..\build\msvc\Vicon.CustomCpp.targets" />
+  </ImportGroup>
+</Project>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files" />
+    <Filter Include="Header Files" />
+    <Filter Include="Resource Files" />
+    <Filter Include="Other Files" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ViconDataStreamSDK_MATLAB.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClInclude Include="ForcedFirstPCH.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ViconDataStreamSDK_MATLAB.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ViconDataStreamSDK_MATLABVersion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <None Include="VersionInfoResource.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+    <ResourceCompile Include="ViconDataStreamSDK_MATLAB.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+    <None Include="AdaptBool.m">
+      <Filter>Other Files</Filter>
+    </None>
+    <None Include="Client.m">
+      <Filter>Other Files</Filter>
+    </None>
+    <None Include="DeviceType.m">
+      <Filter>Other Files</Filter>
+    </None>
+    <None Include="Direction.m">
+      <Filter>Other Files</Filter>
+    </None>
+    <None Include="Result.m">
+      <Filter>Other Files</Filter>
+    </None>
+    <None Include="ServerOrientation.m">
+      <Filter>Other Files</Filter>
+    </None>
+    <None Include="StreamMode.m">
+      <Filter>Other Files</Filter>
+    </None>
+    <None Include="TimecodeStandard.m">
+      <Filter>Other Files</Filter>
+    </None>
+    <None Include="Unit.m">
+      <Filter>Other Files</Filter>
+    </None>
+    <None Include="ViconDataStreamSDK_MATLAB.project.xml">
+      <Filter>Other Files</Filter>
+    </None>
+    <None Include="ViconDataStreamSDK_MATLABDotNETTest.m">
+      <Filter>Other Files</Filter>
+    </None>
+    <None Include="ViconDataStreamSDK_MATLABInternalTest.m">
+      <Filter>Other Files</Filter>
+    </None>
+    <None Include="ViconDataStreamSDK_MATLABTest.m">
+      <Filter>Other Files</Filter>
+    </None>
+  </ItemGroup>
+</Project>

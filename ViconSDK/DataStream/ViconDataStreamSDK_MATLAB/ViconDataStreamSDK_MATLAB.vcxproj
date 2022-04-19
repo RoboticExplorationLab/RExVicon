@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="InternalRelease|x64">
+      <Configuration>InternalRelease</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{00000000-0000-0000-0000-0000F6BC4654}</ProjectGuid>
+    <RootNamespace>ViconDataStreamSDK_MATLAB</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="..\..\..\..\build\msvc\MSVC_Base.props" />
+    <Import Project="..\..\..\..\build\msvc\MSVC_MaxWarningLevel.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='InternalRelease|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>..\..\..\..\bin\$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <TargetName>ViconDataStreamSDK_MATLAB</TargetName>
+    <TargetExt>.dll</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='InternalRelease|x64'">
+    <OutDir>..\..\..\..\bin\$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <TargetName>ViconDataStreamSDK_MATLAB</TargetName>
+    <TargetExt>.dll</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>..\..\..\..\bin\$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <TargetName>ViconDataStreamSDK_MATLAB</TargetName>
+    <TargetExt>.dll</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.;..\..;..;.;Debug;..\..\..\..\thirdparty\Boost\boost-1.68.0-windows-vc140-x64-1\include\boost-1_68;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>..\..\..\..\bin\Debug;%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <PreprocessorDefinitions>TCM_WIN32;PROJECT_SOURCE_PATH=".";RELEASE_SOFTWARE;BOOST_THREAD_DYN_LINK;BOOST_LIB_TOOLSET="vc140";BOOST_CHRONO_DYN_LINK;BOOST_SYSTEM_DYN_LINK;BOOST_PYTHON_DYN_LINK;BOOST_FILESYSTEM_DYN_LINK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalOptions>/experimental:external /wd4706 /wd5044 /external:W0 /external:env:INCLUDE /external:I ..\..\..\..\thirdparty\Boost\boost-1.68.0-windows-vc140-x64-1\include\boost-1_68 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>TCM_WIN32;PROJECT_SOURCE_PATH=".";RELEASE_SOFTWARE;BOOST_THREAD_DYN_LINK;BOOST_LIB_TOOLSET="vc140";BOOST_CHRONO_DYN_LINK;BOOST_SYSTEM_DYN_LINK;BOOST_PYTHON_DYN_LINK;BOOST_FILESYSTEM_DYN_LINK;</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.;Debug;.;..\..;..;.;Debug;..\..\..\..\thirdparty\Boost\boost-1.68.0-windows-vc140-x64-1\include\boost-1_68;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <ImportLibrary>..\..\..\..\lib\Debug\$(TargetName).lib</ImportLibrary>
+      <AdditionalLibraryDirectories>..\..\..\..\lib\Debug;..\..\..\..\thirdparty\Boost\boost-1.68.0-windows-vc140-x64-1\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <Lib>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='InternalRelease|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.;..\..;..;.;InternalRelease;..\..\..\..\thirdparty\Boost\boost-1.68.0-windows-vc140-x64-1\include\boost-1_68;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>..\..\..\..\bin\InternalRelease;%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <PreprocessorDefinitions>VICON_INTERNAL_RELEASE;NDEBUG;TCM_WIN32;PROJECT_SOURCE_PATH=".";RELEASE_SOFTWARE;BOOST_THREAD_DYN_LINK;BOOST_LIB_TOOLSET="vc140";BOOST_CHRONO_DYN_LINK;BOOST_SYSTEM_DYN_LINK;BOOST_PYTHON_DYN_LINK;BOOST_FILESYSTEM_DYN_LINK;BOOST_DISABLE_ASSERTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalOptions>/experimental:external /wd4706 /wd5044 /external:W0 /external:env:INCLUDE /external:I ..\..\..\..\thirdparty\Boost\boost-1.68.0-windows-vc140-x64-1\include\boost-1_68 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>VICON_INTERNAL_RELEASE;NDEBUG;TCM_WIN32;PROJECT_SOURCE_PATH=".";RELEASE_SOFTWARE;BOOST_THREAD_DYN_LINK;BOOST_LIB_TOOLSET="vc140";BOOST_CHRONO_DYN_LINK;BOOST_SYSTEM_DYN_LINK;BOOST_PYTHON_DYN_LINK;BOOST_FILESYSTEM_DYN_LINK;BOOST_DISABLE_ASSERTS;</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.;InternalRelease;.;..\..;..;.;InternalRelease;..\..\..\..\thirdparty\Boost\boost-1.68.0-windows-vc140-x64-1\include\boost-1_68;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <ImportLibrary>..\..\..\..\lib\InternalRelease\$(TargetName).lib</ImportLibrary>
+      <AdditionalLibraryDirectories>..\..\..\..\lib\InternalRelease;..\..\..\..\thirdparty\Boost\boost-1.68.0-windows-vc140-x64-1\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <Lib>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.;..\..;..;.;Release;..\..\..\..\thirdparty\Boost\boost-1.68.0-windows-vc140-x64-1\include\boost-1_68;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>..\..\..\..\bin\Release;%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <PreprocessorDefinitions>NDEBUG;TCM_OFF_SITE;TCM_WIN32;PROJECT_SOURCE_PATH=".";RELEASE_SOFTWARE;BOOST_THREAD_DYN_LINK;BOOST_LIB_TOOLSET="vc140";BOOST_CHRONO_DYN_LINK;BOOST_SYSTEM_DYN_LINK;BOOST_PYTHON_DYN_LINK;BOOST_FILESYSTEM_DYN_LINK;BOOST_DISABLE_ASSERTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalOptions>/experimental:external /wd4706 /wd5044 /external:W0 /external:env:INCLUDE /external:I ..\..\..\..\thirdparty\Boost\boost-1.68.0-windows-vc140-x64-1\include\boost-1_68 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;TCM_OFF_SITE;TCM_WIN32;PROJECT_SOURCE_PATH=".";RELEASE_SOFTWARE;BOOST_THREAD_DYN_LINK;BOOST_LIB_TOOLSET="vc140";BOOST_CHRONO_DYN_LINK;BOOST_SYSTEM_DYN_LINK;BOOST_PYTHON_DYN_LINK;BOOST_FILESYSTEM_DYN_LINK;BOOST_DISABLE_ASSERTS;</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.;Release;.;..\..;..;.;Release;..\..\..\..\thirdparty\Boost\boost-1.68.0-windows-vc140-x64-1\include\boost-1_68;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <ImportLibrary>..\..\..\..\lib\Release\$(TargetName).lib</ImportLibrary>
+      <AdditionalLibraryDirectories>..\..\..\..\lib\Release;..\..\..\..\thirdparty\Boost\boost-1.68.0-windows-vc140-x64-1\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <Lib>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="ViconDataStreamSDK_MATLAB.cpp">
+    </ClCompile>
+    <ClInclude Include="ForcedFirstPCH.h">
+    </ClInclude>
+    <ClInclude Include="resource.h">
+    </ClInclude>
+    <ClInclude Include="ViconDataStreamSDK_MATLAB.h">
+    </ClInclude>
+    <ClInclude Include="ViconDataStreamSDK_MATLABVersion.h">
+    </ClInclude>
+    <None Include="VersionInfoResource.rc2">
+    </None>
+    <ResourceCompile Include="ViconDataStreamSDK_MATLAB.rc">
+    </ResourceCompile>
+    <None Include="AdaptBool.m">
+    </None>
+    <None Include="Client.m">
+    </None>
+    <None Include="DeviceType.m">
+    </None>
+    <None Include="Direction.m">
+    </None>
+    <None Include="Result.m">
+    </None>
+    <None Include="ServerOrientation.m">
+    </None>
+    <None Include="StreamMode.m">
+    </None>
+    <None Include="TimecodeStandard.m">
+    </None>
+    <None Include="Unit.m">
+    </None>
+    <None Include="ViconDataStreamSDK_MATLAB.project.xml">
+    </None>
+    <None Include="ViconDataStreamSDK_MATLABDotNETTest.m">
+    </None>
+    <None Include="ViconDataStreamSDK_MATLABInternalTest.m">
+    </None>
+    <None Include="ViconDataStreamSDK_MATLABTest.m">
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\StreamCommon\StreamCommon.vcxproj">
+      <Project>{00000000-0000-0000-0000-000011615E7F}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ViconCGStream\ViconCGStream.vcxproj">
+      <Project>{00000000-0000-0000-0000-0000D7AF35E6}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ViconCGStreamClient\ViconCGStreamClient.vcxproj">
+      <Project>{00000000-0000-0000-0000-0000DBDC1B0D}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ViconCGStreamClientSDK\ViconCGStreamClientSDK.vcxproj">
+      <Project>{00000000-0000-0000-0000-0000BE603AC0}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ViconDataStreamSDKCore\ViconDataStreamSDKCore.vcxproj">
+      <Project>{00000000-0000-0000-0000-0000DAECF320}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ViconDataStreamSDKCoreUtils\ViconDataStreamSDKCoreUtils.vcxproj">
+      <Project>{00000000-0000-0000-0000-0000C8A4314E}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ViconDataStreamSDK_CPP\ViconDataStreamSDK_CPP.vcxproj">
+      <Project>{00000000-0000-0000-0000-00004336DFCF}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\..\..\..\build\msvc\Vicon.CustomCpp.targets" />
+  </ImportGroup>
+</Project>

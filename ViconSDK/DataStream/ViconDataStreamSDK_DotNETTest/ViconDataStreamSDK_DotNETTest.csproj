@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build"    xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
+        <ProductVersion>8.0.50727</ProductVersion>
+        <SchemaVersion>2.0</SchemaVersion>
+        <ProjectGuid>{00000000-0000-0000-0000-000011B6C565}</ProjectGuid>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <OutputType>Exe</OutputType>
+        <RootNamespace>ViconDataStreamSDK_DotNETTest</RootNamespace>
+        <LangVersion>default</LangVersion>
+        <AssemblyName>ViconDataStreamSDK_DotNETTest</AssemblyName>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <PlatformTarget>x64</PlatformTarget>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <OutputPath>..\..\..\..\bin\Debug</OutputPath>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'InternalRelease|x64' ">
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <OutputPath>..\..\..\..\bin\InternalRelease</OutputPath>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <DefineConstants>TRACE</DefineConstants>
+        <OutputPath>..\..\..\..\bin\Release</OutputPath>
+    </PropertyGroup>
+    <ItemGroup>
+        <Compile Include="ViconDataStreamSDK_DotNETTest.cs"/>
+    </ItemGroup>
+    <ItemGroup>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\ViconDataStreamSDK_DotNET\ViconDataStreamSDK_DotNET.vcxproj">
+            <Project>{00000000-0000-0000-0000-00009BBA9CAD}</Project>
+            <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+        </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+        <Reference Include="ViconDataStreamSDK_DotNET" />
+    </ItemGroup>
+    <ItemGroup>
+    </ItemGroup>
+    <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>

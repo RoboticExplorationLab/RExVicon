@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files" />
+    <Filter Include="Header Files" />
+    <Filter Include="Resource Files" />
+    <Filter Include="Other Files" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DataStreamClient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DataStreamRetimingClient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClInclude Include="CoreAdapters.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DataStreamClient.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DataStreamRetimingClient.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IDataStreamClientBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StringFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ViconDataStreamSDK_CPPVersion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <None Include="VersionInfoResource.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+    <ResourceCompile Include="ViconDataStreamSDK_CPP.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+    <None Include="ReadMe.txt">
+      <Filter>Other Files</Filter>
+    </None>
+    <None Include="ViconDataStreamSDK_CPP.project.xml">
+      <Filter>Other Files</Filter>
+    </None>
+  </ItemGroup>
+</Project>
