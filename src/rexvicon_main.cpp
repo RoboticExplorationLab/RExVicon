@@ -12,7 +12,7 @@ namespace rexlab {
 void usage()
 {
     std::cout << "- v / --vicon_ip : IP address of Vicon server\n"
-                 "-sp / --serial-port : The name of the serial port to print to(default / dev / ttyACM0)\n"
+                 "- sp / --serial-port : The name of the serial port to print to(default / dev / ttyACM0)\n"
                  "- b / --baud_rate : Baud rate of the serial port(default 57600)\n"
                  "- a / --ipaddres : IP address on which to publish the ZMQ data(default 192.168.3.134)\n"
                  "- p / --port : Port on which which to publish the ZMQ data(default 5555)\n"
@@ -109,7 +109,7 @@ int main(int argc, char* argv[]) {
     }
     else
     {
-      usage();
+      rexlab::usage();
     }
   }
 
