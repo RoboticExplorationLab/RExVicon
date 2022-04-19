@@ -84,23 +84,32 @@ int main(int argc, char* argv[]) {
     if (*it == "-v" || *it == "--vicon_port") {
       ip_addr = stoi(*(++it));
     }
-    if (*it == "-p" || *it == "--port") {
+    else if (*it == "-p" || *it == "--port") {
       port = stoi(*(++it));
     }
-    if (*it == "-sp" || *it == "--serial_port") {
+    else if (*it == "-sp" || *it == "--serial_port")
+    {
       port_name = *(++it);
     }
-    if (*it == "-b" || *it == "--baud_rate") {
+    else if (*it == "-b" || *it == "--baud_rate")
+    {
       baud_rate = stoi(*(++it));
     }
-    if (*it == "-a" || *it == "--ipaddress") {
+    else if (*it == "-a" || *it == "--ipaddress")
+    {
       ip_addr = *(++it);
     }
-    if (*it == "-t" || *it == "--subject") {
+    else if (*it == "-t" || *it == "--subject")
+    {
       subject = *(++it);
     }
-    if (*it == "-w" || *it == "--wait") {
-		  wait_to_connect = true;
+    else if (*it == "-w" || *it == "--wait")
+    {
+      wait_to_connect = true;
+    }
+    else
+    {
+      usage();
     }
   }
 

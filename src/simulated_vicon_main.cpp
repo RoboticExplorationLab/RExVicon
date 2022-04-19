@@ -24,26 +24,34 @@ void Run(const std::string &port_name, int baud_rate,
          const std::string &ip_addr, int port)
 {
     SerialZMQCallback callback(port_name, baud_rate, ip_addr, port);
+    RatePrinter rate_printer;
+    rate_printer.Enable();
+    rate_printer.Init();
+
+    int i = 0;
     while (true)
     {
-        Pose<float> pose_float(10000);
-        pose_float.position_x = 0.0;
-        pose_float.position_y = 0.0;
-        pose_float.position_z = 0.0;
-        pose_float.quaternion_w = 1.0;
-        pose_float.quaternion_x = 0.0;
-        pose_float.quaternion_y = 0.0;
-        pose_float.quaternion_z = 0.0;
-        callback.operator()(pose_float);
+        i++;
+        rexlab::Pose<float> pose;
+        pose.position_x = 0.15;
+        pose.position_y = 0.15;
+        pose.position_z = 0.05;
+        pose.quaternion_w = 1.0;
+        pose.quaternion_x = 0.0;
+        pose.quaternion_y = 0.0;
+        pose.quaternion_z = 0.0;
+
+        callback.operator()<float>(pose);
+        rate_printer.Print();
     }
 }
 }  // namespace rexlab
 
 int main(int argc, char *argv[])
 {
-    std::string port_name = "/dev/ttyACM0";
+    std::string port_name = "/dev/tty.usbmodem14201";
     int baud_rate = 57600;
-    std::string ip_addr = "192.168.3.134";
+    std::string ip_addr = "127.0.0.1";
     int port = 5555;
 
     std::vector<std::string> args;
@@ -52,7 +60,7 @@ int main(int argc, char *argv[])
     }
     for (auto it = args.begin(); it != args.end(); ++it)
     {
-        if (*it == "-sp" || *it == "--port")
+        if (*it == "-p" || *it == "--port")
         {
             port = stoi(*(++it));
         }
@@ -71,10 +79,7 @@ int main(int argc, char *argv[])
         else if (*it == "-h" || *it == "--help")
         {
             rexlab::usage();
-        }
-        else
-        {
-            rexlab::usage();
+            return -1;
         }
     }
 

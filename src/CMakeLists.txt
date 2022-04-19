@@ -8,9 +8,6 @@ include_directories(
     "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>"
 )
 
-# cmake_print_variables("$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>")
-# cmake_print_variables("$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
-
 add_library(rexvicon_driver
     vicon_driver.hpp
     vicon_driver.cpp
@@ -56,3 +53,5 @@ target_link_libraries(simulated_vicon
         fmt
         libserialport::libserialport
 )
+
+execute_process(COMMAND ./arduino/build_lora_relay.sh --compile)

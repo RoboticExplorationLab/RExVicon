@@ -3,17 +3,17 @@
  * @author Brian Jackson (bjack205@gmail.com)
  * @brief This script reads in Vicon data over the radio and prints it in human-readable
  *        format over the serial port
- * 
+ *
  * Board: Adafruit Feather M0 LoRa
- * 
- * This script is useful for making sure the data being received over the LoRa radio 
+ *
+ * This script is useful for making sure the data being received over the LoRa radio
  * makes sense.
- * 
+ *
  * @version 0.1
  * @date 2021-09-24
- * 
+ *
  * @copyright Copyright (c) 2021
- * 
+ *
  */
 #include <SPI.h>
 #include <LoRa.h>
@@ -72,7 +72,7 @@ void setup() {
   LoRa.setSignalBandwidth(500E3);
 
   time_start = micros();
-  
+
   LoRa.onReceive(onReceive);
   LoRa.receive(MSG_SIZE);
 

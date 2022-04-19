@@ -17,7 +17,11 @@ bool SerialCallback::Open() {
   LibSerialCheck(sp_get_port_by_name(port_name.c_str(), &port));
 
   fmt::print("Port name: {}\n", sp_get_port_name(port));
-  fmt::print("Port description: {}\n", sp_get_port_description(port));
+  char *description = sp_get_port_description(port);
+  if (description != NULL)
+  {
+    fmt::print("Port description: {}\n", sp_get_port_description(port));
+  }
 
   fmt::print("Opening Port.\n");
   enum sp_return result = sp_open(port, SP_MODE_READ_WRITE);
